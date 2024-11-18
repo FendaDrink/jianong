@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect:'/public',
+      redirect:'/enterprise/productInfo',
     },
     {
       path:'/',
@@ -15,29 +15,9 @@ const router = createRouter({
       component: ()=>import('@/views/Home.vue'),
       children:[
         {
-          path:'/public',
-          name:'public',
-          component:()=>import('@/views/ProductionLine/MainContent.vue')
-        },
-        {
-          path:'/color',
-          name:'color',
-          component:()=>import('@/views/ProductionLine/Color.vue')
-        },
-        {
-          path:'/engine',
-          name:'engine',
-          component:()=>import('@/views/ProductionLine/Engine.vue')
-        },
-        {
           path:'/log',
           name:'log',
           component:()=>import('@/views/Log.vue')
-        },
-        {
-          path:'/car',
-          name:'car',
-          component:()=>import('@/views/OrderCar/index.vue')
         },
         //   嘉农相关路由在下面
         {
@@ -47,7 +27,7 @@ const router = createRouter({
           children:[
             {
               path:'productInfo',
-              name:'productInfo',
+              name:'EnterpriseProductInfo',
               component:()=>import('@/views/Enterprise/ProductInfo/index.vue')
             },
             {
@@ -64,6 +44,16 @@ const router = createRouter({
               path:'inventory',
               name:'EnterpriseInventory',
               component:()=>import('@/views/Enterprise/Inventory/index.vue')
+            },
+            {
+              path:'sale',
+              name:'EnterpriseSale',
+              component:()=>import('@/views/Enterprise/Sale/index.vue')
+            },
+             {
+              path:'planning',
+              name:'EnterprisePlanning',
+              component:()=>import('@/views/Enterprise/Planning/index.vue')
             }
           ]
         },
@@ -177,13 +167,33 @@ const router = createRouter({
               {
                 path:'inventory',
                 name:'WholesaleInventory',
-                component:()=>import('@/views/Wholesale/Inventory/index.vue')
+                component:()=>import('@/views/Wholesale/Sale/index.vue')
               },
-            {
-              path:'inStock',
-              name:'WholeSaleInStock',
-              component:()=>import('@/views/Wholesale/InStock/index.vue')
-            }
+              {
+                path:'inStock',
+                name:'WholeSaleInStock',
+                component:()=>import('@/views/Wholesale/InStock/index.vue')
+              },
+              {
+                path:'customer',
+                name:'customer',
+                component:()=>import('@/views/Wholesale/Customer/index.vue')
+              },
+              {
+                path:'inBound',
+                name:'inBound',
+                component:()=>import('@/views/Wholesale/InBound/index.vue')
+              },
+              {
+                path:'sale',
+                name:'WholeSalesale',
+                component:()=>import('@/views/Wholesale/Sale/index.vue')
+              },
+              {
+                path:'productInfo',
+                name:'WholeSaleProductInfo',
+                component:()=>import('@/views/Wholesale/ProductInfo/index.vue')
+              }
           ]
         }
       ]

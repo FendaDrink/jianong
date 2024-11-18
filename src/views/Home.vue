@@ -4,11 +4,7 @@
       <div class="logo">
         <span v-if="!collapsed" style="white-space:nowrap;">嘉农管理系统</span>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" >
-        <a-menu-item key="/public">
-          <BarsOutlined />
-          <span>生产线信息</span>
-        </a-menu-item>
+      <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" @openChange="handleOpenChange">
         <a-sub-menu key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
           <a-menu-item key="/enterprise/productInfo">
@@ -17,7 +13,7 @@
           <a-menu-item key="/enterprise/acquisition">
             产品收购
           </a-menu-item>
-          <a-menu-item key="/enterprise/acquisition">
+          <a-menu-item key="/enterprise/sale">
             产品销售
           </a-menu-item>
           <a-menu-item key="/enterprise/inOutBound">
@@ -26,23 +22,23 @@
           <a-menu-item key="/enterprise/inventory">
             公司物资盘点
           </a-menu-item>
-          <a-menu-item key="/enterprise/inventory">
+          <a-menu-item key="/enterprise/planning">
             生产计划制定
           </a-menu-item>
         </a-sub-menu>
 
          <a-sub-menu key="/wholesale">
           <template #title><span><CarOutlined /><span>批发中心系统</span></span></template>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item key="/wholesale/customer">
              顾客信息
             </a-menu-item>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item key="/wholesale/inBound">
             批发中心产品入库
           </a-menu-item>
-            <a-menu-item key="/wholesale/inventory">
-            产品信息
+            <a-menu-item key="/wholesale/productInfo">
+            批发中心产品信息
           </a-menu-item>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item key="/wholesale/sale">
             批发中心产品销售
           </a-menu-item>
            <a-menu-item key="/wholesale/inStock">
@@ -61,10 +57,9 @@
           <a-menu-item key="/production/inStock">
             生产基地产品库存
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/production/productInventory">
             生产基地产品盘点
           </a-menu-item>
-
           <a-menu-item key="/production/accessProduct">
             生产基地产品出/入库
           </a-menu-item>
@@ -109,18 +104,6 @@
             生产计划查询
           </a-menu-item>
         </a-sub-menu>
-<!--        <a-menu-item key="/production">-->
-<!--          <BgColorsOutlined />-->
-<!--          <span>生产基地系统</span>-->
-<!--        </a-menu-item>-->
-<!--        <a-menu-item key="/wholesale">-->
-<!--          <CarOutlined />-->
-<!--          <span>批发中心系统</span>-->
-<!--        </a-menu-item>-->
-        <a-menu-item key="/purchasing">
-          <FileOutlined />
-          <span>代购点系统</span>
-        </a-menu-item>
         <a-menu-item key="/log">
           <FileOutlined />
           <span>操作日志</span>
@@ -164,18 +147,21 @@ const currentPath = ref<string>(route.path);
 const selectedKeys = ref<string[]>([currentPath.value]);
 const isLoginOutOpen = ref<boolean>(false);
 const collapsed = ref<boolean>(false);
-const openKeys = ref<string[]>([])
+const openKeys = ref<string[]>(['/'+currentPath.value.split('/')[1]])
 import {useUserInfoStore} from "@/stores/userInfo";
 import {removeToken} from "@/request/auth";
 import {message} from "ant-design-vue";
 const userInfoStore = useUserInfoStore();
 const username = localStorage.getItem('planning-system-username');
-const handleClick = async (e : any) => {
-  selectedKeys.value = [e.key];
-  await router.push(e.key);
-  console.log(openKeys.value,'4567')
+const handleClick = async ({key, keyPath}: any) => {
+  selectedKeys.value = [key];
+  await router.push(key);
+  openKeys.value = [keyPath[0]]
 };
 
+const handleOpenChange = (keys: string []) => {
+  openKeys.value = keys.slice(0, 2);
+}
 const confirm = () => {
   Modal.confirm({
     title: '退出',

@@ -1,7 +1,7 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">生产基地产品盘点</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">顾客信息</h1>
   <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
