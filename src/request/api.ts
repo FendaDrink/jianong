@@ -1,0 +1,92 @@
+import request from "@/utils/request";
+import type {UnwrapNestedRefs} from "vue";
+import {getToken} from "@/request/auth";
+
+/* 登录 */
+export const login = (params:LoginAPIReq):Promise<LoginAPIRes> => request.post('/login',params);
+
+/* 获取详细公共信息标题 */
+export const getPublicTitle = ():Promise<PublicTitleAPIRes> => request.get('/publicInfo');
+
+/* 获取详细公共信息列表 */
+export const getPublicDetail = ():Promise<PublicDetailAPIRes> => request.get('/publicInfo/getDetail');
+
+/* 通过key获取详细公共信息列表 */
+export const getPublicDetailByKey = (key:string):Promise<PublicDetailByKeyAPIRes> => request.get('/publicInfo/getDetail/'+key);
+
+/* 增加详细公共信息记录 */
+export const addPublicDetail = (params: UnwrapNestedRefs<AddPublicDetailAPIReq>):Promise<AddPublicDetailAPIRes> => request.post('/publicInfo/getDetail',params);
+
+/* 修改详细公共信息记录 */
+export const updatePublicDetail = (params: UnwrapNestedRefs<UpdatePublicDetailAPIReq>):Promise<UpdatePublicDetailAPIRes> => request.patch('/publicInfo/getDetail',params);
+
+/* 删除详细公共信息记录 */
+export const deletePublicDetail = (key:string):Promise<DeletePublicDetailAPIRes> => request.delete('/publicInfo/getDetail/'+key);
+
+/* 批量删除详细公共信息记录 */
+export const deletePublicDetailBatch = (params:UnwrapNestedRefs<DeletePublicDetailAPIReq>):Promise<DeletePublicDetailAPIRes> => request.post('/publicInfo/getDetail/deleteBatch',params);
+
+/* 通过key获取生产线特殊信息 */
+export const getPublicDetailByKeySpecial = (key:string):Promise<PublicDetailByKeySpecialAPIRes> => request.get('/publicInfo/getDetail/special/'+key);
+
+/* 修改生产线特殊信息 */
+export const updatePublicDetailByKeySpecial = (params:UpdatePublicSpecialAPIReq):Promise<UpdatePublicSpecialAPIRes> => request.patch('/publicInfo/getDetail/special',params);
+
+/* 获取特殊发动机标题和数据 */
+export const getSpecialEngine = ():Promise<SpecialEngineTitleAndDataAPIRes> => request.get('/engine');
+
+/* 新增特殊发动机记录 */
+export const addSpecialEngine = (params:UnwrapNestedRefs<AddEngineAPIReq>):Promise<AddEngineAPIRes> => request.post('/engine',params);
+
+/* 修改特殊发动机记录 */
+export const updateSpecialEngine = (params:UnwrapNestedRefs<UpdateEngineAPIReq>):Promise<UpdateEngineAPIRes> => request.patch('/engine',params);
+
+/* 删除特殊发动机记录 */
+export const deleteSpecialEngine = (key:string):Promise<DeleteEngineAPIRes> => request.delete('/engine/'+key);
+
+/* 批量删除发动机记录 */
+export const deleteSpecialEngineBatch = (params:UnwrapNestedRefs<DeleteEngineBatchAPIReq>):Promise<DeleteEngineBatchAPIRes> => request.post('/engine/deleteBatch',params);
+
+/* 获取计划用颜色标题和数据 */
+export const getColor = ():Promise<ColorTitleAndDataAPIRes> => request.get('/color');
+
+/* 新增计划用颜色配置记录 */
+export const addColor = (params:UnwrapNestedRefs<AddColorAPIReq>):Promise<AddColorAPIRes> => request.post('/color',params);
+
+/* 修改计划用颜色配置记录 */
+export const updateColor = (params:UnwrapNestedRefs<UpdateColorAPIReq>):Promise<UpdateColorAPIRes> => request.patch('/color',params);
+
+/* 删除计划用颜色配置记录 */
+export const deleteColor = (key:string):Promise<DeleteColorAPIRes> => request.delete('/color/'+key);
+
+/* 批量删除计划用颜色配置记录 */
+export const deleteColorBatch = (params:UnwrapNestedRefs< DeleteColorBatchAPIReq>):Promise< DeleteColorBatchAPIRes> => request.post('/color/deleteBatch',params);
+
+/* 获取操作日志 */
+export const getLog = ():Promise<LogsAPIRes> => request.get('/log');
+
+/* 获取订单车标题和数据 */
+export const getOrderCar = ():Promise<OrderTitleAndDataAPIRes> => request.get('/car');
+
+/* 通过orderId获取订单车记录 */
+export const getOrderCarByOrderId = (orderId:string):Promise<OrderDetailAPIRes> => request.get('/car/'+orderId);
+/* 新增订单车记录 */
+export const addOrderCar = (params:UnwrapNestedRefs<AddOrderAPIReq>):Promise<AddOrderAPIRes> => request.post('/car',params);
+
+/* 修改订单车记录 */
+export const updateOrderCar = (params:UnwrapNestedRefs<UpdateOrderAPIReq>):Promise<UpdateOrderAPIRes> => request.patch('/car',params);
+
+/* 删除订单车记录 */
+export const deleteOrderCar = (orderId:string):Promise<DeleteOrderAPIRes> => request.delete('/car/'+orderId);
+
+/* 上传文件 */
+export const uploadFile = async (params:UnwrapNestedRefs<UploadFileAPIReq>):Promise<UploadFileAPIRes> => request.post(
+    '/car/upload',params,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': getToken()
+        },
+})
+
+/* 批量删除订单车记录 */
+export const deleteOrderCarBatch = (params:UnwrapNestedRefs<DeleteOrdersAPIReq>):Promise<DeleteOrdersAPIRes> => request.post('/car/deleteBatch',params);
