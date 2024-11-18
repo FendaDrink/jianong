@@ -5,10 +5,6 @@
         <span v-if="!collapsed" style="white-space:nowrap;">嘉农管理系统</span>
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" >
-        <a-menu-item key="/public">
-          <BarsOutlined />
-          <span>生产线信息</span>
-        </a-menu-item>
         <a-sub-menu key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
           <a-menu-item key="/enterprise/productInfo">
@@ -40,7 +36,7 @@
             批发中心产品入库
           </a-menu-item>
             <a-menu-item key="/wholesale/productInfo">
-            产品信息
+            批发中心产品信息
           </a-menu-item>
            <a-menu-item key="/wholesale/sale">
             批发中心产品销售
@@ -160,7 +156,6 @@ const username = localStorage.getItem('planning-system-username');
 const handleClick = async (e : any) => {
   selectedKeys.value = [e.key];
   await router.push(e.key);
-  console.log(openKeys.value,'4567')
 };
 
 const confirm = () => {
