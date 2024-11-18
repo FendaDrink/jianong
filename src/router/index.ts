@@ -64,26 +64,100 @@ const router = createRouter({
           children:[
               {
                 path:'inventory',
-                name:'ProductionInventory',
+                name:'Inventory',
                 component:()=>import('@/views/Production/Inventory/index.vue')
               },
               {
                 path:'inStock',
-                name:'ProductionInStock',
+                name:'InStock',
                 component:()=>import('@/views/Production/InStock/index.vue')
               },
               {
                 path:'planning',
-                name:'ProductionPlanning',
+                name:'Planning',
                 component:()=>import('@/views/Production/Planning/index.vue')
-              }
+              },
+              {
+                path:'accessProduct',
+                name:'AccessProduct',
+                component:()=>import('@/views/Production/AccessProduct/index.vue')
+              },
+              {
+                path:'accessInventory',
+                name:'AccessInventory',
+                component:()=>import('@/views/Production/AccessInventory/index.vue')
+              },
+              {
+                path:'checkInventory',
+                name:'CheckInventory',
+                component:()=>import('@/views/Production/CheckInventory/index.vue')
+              },
+              {
+                path:'takeStock',
+                name:'TakeStock',
+                component:()=>import('@/views/Production/TakeStock/index.vue')
+              },
+              
+
+             
           ]
         },
         {
           // 代购点系统
-          path:'/purchasing',
+          path:'purchasing',
           name:'purchasing',
-          component:()=>import('@/views/Purchasing/index.vue')
+          // component:()=>import('@/views/Purchasing/index.vue'),
+          children:[
+            {
+              path:'farmerInfo',
+              name:'FarmerInfo',
+              component:()=>import('@/views/Purchasing/FarmerInfo/index.vue')
+            },
+            {
+              path:'accessProduct',
+              name:'AccessProduct',
+              component:()=>import('@/views/Purchasing/AccessProduct/index.vue')
+            },
+            {
+              path:'acquireProduct',
+              name:'AcquireProduct',
+              component:()=>import('@/views/Purchasing/AcquireProduct/index.vue')
+            },
+
+            {
+              path:'queryProduct',
+              name:'QueryProduct',
+              component:()=>import('@/views/Purchasing/QueryProduct/index.vue')
+            },
+
+            {
+              path:'inventoryConsign',
+              name:'InventoryConsign',
+              component:()=>import('@/views/Purchasing/IventoryConsign/index.vue')
+            },
+            {
+              path:'accessInventory',
+              name:'AccessInventory',
+              component:()=>import('@/views/Purchasing/accessInventory/index.vue')
+            },
+            {
+              path:'checkInventory',
+              name:'CheckInventory',
+              component:()=>import('@/views/Purchasing/CheckInventory/index.vue')
+            },
+            {
+              path:'takeStock',
+              name:'TakeStock',
+              component:()=>import('@/views/Purchasing/TakeStock/index.vue')
+            },
+            {
+              path:'project',
+              name:'Project',
+              component:()=>import('@/views/Purchasing/Project/index.vue')
+            },
+
+          ]
+
         },
         {
           // 批发中心系统
