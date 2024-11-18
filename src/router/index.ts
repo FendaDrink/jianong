@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect:'/public',
+      redirect:'/enterprise/productInfo',
     },
     {
       path:'/',
