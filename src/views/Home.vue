@@ -64,47 +64,48 @@
            <a-menu-item key="/production/inventory">
             生产基地产品盘点
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+
+          <a-menu-item key="/production/accessProduct">
             生产基地产品出/入库
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/accessInventory">
             生产基地物资出/入库
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/checkInventory">
             生产基地物资库存查询
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/takeStock">
             生产基地物资盘点
           </a-menu-item>
         </a-sub-menu>
 
-        <a-sub-menu key="/production" titleClick="handleTitleClick">
+        <a-sub-menu key="/purchasing" titleClick="handleTitleClick">
           <template #title><span><BgColorsOutlined /><span>代购点系统</span></span></template>
-           <a-menu-item key="/production/planning">
+           <a-menu-item key="/purchasing/farmerInfo">
             农户信息
           </a-menu-item>
-          <a-menu-item key="/production/inStock">
+          <a-menu-item key="/purchasing/accessProduct">
             产品出库
           </a-menu-item>
-           <a-menu-item key="/production/inStock">
+           <a-menu-item key="/purchasing/acquireProduct">
             产品收购
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/purchasing/queryProduct">
             产品库存查询
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/purchasing/inventoryConsign">
             代购点产品盘点
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/purchasing/accessInventory">
             代购点物资出/入库
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/purchasing/checkInventory">
             代购点物资库存查询
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/purchasing/takeStock">
             代购点物资盘点
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/purchasing/project">
             生产计划查询
           </a-menu-item>
         </a-sub-menu>
