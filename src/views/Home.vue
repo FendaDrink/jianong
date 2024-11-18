@@ -17,7 +17,7 @@
           <a-menu-item key="/enterprise/acquisition">
             产品收购
           </a-menu-item>
-          <a-menu-item key="/enterprise/acquisition">
+          <a-menu-item key="/enterprise/sale">
             产品销售
           </a-menu-item>
           <a-menu-item key="/enterprise/inOutBound">
@@ -26,23 +26,23 @@
           <a-menu-item key="/enterprise/inventory">
             公司物资盘点
           </a-menu-item>
-          <a-menu-item key="/enterprise/inventory">
+          <a-menu-item key="/enterprise/planning">
             生产计划制定
           </a-menu-item>
         </a-sub-menu>
 
          <a-sub-menu key="/wholesale">
           <template #title><span><CarOutlined /><span>批发中心系统</span></span></template>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item key="/wholesale/customer">
              顾客信息
             </a-menu-item>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item key="/wholesale/inBound">
             批发中心产品入库
           </a-menu-item>
-            <a-menu-item key="/wholesale/inventory">
+            <a-menu-item key="/wholesale/productInfo">
             产品信息
           </a-menu-item>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item key="/wholesale/sale">
             批发中心产品销售
           </a-menu-item>
            <a-menu-item key="/wholesale/inStock">
@@ -61,65 +61,53 @@
           <a-menu-item key="/production/inStock">
             生产基地产品库存
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/production/productInventory">
             生产基地产品盘点
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/productInOutBound">
             生产基地产品出/入库
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/suppliesInOutBound">
             生产基地物资出/入库
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/supplies">
             生产基地物资库存查询
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/production/suppliesInventory">
             生产基地物资盘点
           </a-menu-item>
         </a-sub-menu>
 
-        <a-sub-menu key="/production" titleClick="handleTitleClick">
+        <a-sub-menu key="/purchasing">
           <template #title><span><BgColorsOutlined /><span>代购点系统</span></span></template>
-           <a-menu-item key="/production/planning">
+           <a-menu-item key="/purchasing/farmer">
             农户信息
           </a-menu-item>
-          <a-menu-item key="/production/inStock">
+          <a-menu-item key="/purchasing/outBound">
             产品出库
           </a-menu-item>
-           <a-menu-item key="/production/inStock">
+           <a-menu-item key="/purchasing/acquisition">
             产品收购
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/purchasing/inStock">
             产品库存查询
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/purchasing/inventory">
             代购点产品盘点
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/purchasing/suppliesInOutBound">
             代购点物资出/入库
           </a-menu-item>
-           <a-menu-item key="/production/inventory">
+           <a-menu-item key="/purchasing/supplies">
             代购点物资库存查询
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/purchasing/suppliesInventory">
             代购点物资盘点
           </a-menu-item>
-          <a-menu-item key="/production/inventory">
+          <a-menu-item key="/purchasing/planning">
             生产计划查询
           </a-menu-item>
         </a-sub-menu>
-<!--        <a-menu-item key="/production">-->
-<!--          <BgColorsOutlined />-->
-<!--          <span>生产基地系统</span>-->
-<!--        </a-menu-item>-->
-<!--        <a-menu-item key="/wholesale">-->
-<!--          <CarOutlined />-->
-<!--          <span>批发中心系统</span>-->
-<!--        </a-menu-item>-->
-        <a-menu-item key="/purchasing">
-          <FileOutlined />
-          <span>代购点系统</span>
-        </a-menu-item>
         <a-menu-item key="/log">
           <FileOutlined />
           <span>操作日志</span>
