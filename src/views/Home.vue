@@ -1,26 +1,121 @@
 <template>
-  <a-layout style="height: 100vh;width: auto">
+  <a-layout style="height: 800px;overfolow: auto;width: auto">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
         <span v-if="!collapsed" style="white-space:nowrap;">嘉农管理系统</span>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" @click="handleClick">
+      <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" >
         <a-menu-item key="/public">
           <BarsOutlined />
           <span>生产线信息</span>
         </a-menu-item>
-        <a-menu-item key="/enterprise">
-          <video-camera-outlined />
-          <span>公司系统</span>
-        </a-menu-item>
-        <a-menu-item key="/production">
-          <BgColorsOutlined />
-          <span>生产基地系统</span>
-        </a-menu-item>
-        <a-menu-item key="/wholesale">
-          <CarOutlined />
-          <span>批发中心系统</span>
-        </a-menu-item>
+        <a-sub-menu key="/enterprise">
+          <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
+          <a-menu-item key="/enterprise/productInfo">
+            产品信息
+          </a-menu-item>
+          <a-menu-item key="/enterprise/acquisition">
+            产品收购
+          </a-menu-item>
+          <a-menu-item key="/enterprise/acquisition">
+            产品销售
+          </a-menu-item>
+          <a-menu-item key="/enterprise/inOutBound">
+            物资出/入库
+          </a-menu-item>
+          <a-menu-item key="/enterprise/inventory">
+            公司物资盘点
+          </a-menu-item>
+          <a-menu-item key="/enterprise/inventory">
+            生产计划制定
+          </a-menu-item>
+        </a-sub-menu>
+
+         <a-sub-menu key="/wholesale">
+          <template #title><span><CarOutlined /><span>批发中心系统</span></span></template>
+           <a-menu-item key="/wholesale/inventory">
+             顾客信息
+            </a-menu-item>
+           <a-menu-item key="/wholesale/inventory">
+            批发中心产品入库
+          </a-menu-item>
+            <a-menu-item key="/wholesale/inventory">
+            产品信息
+          </a-menu-item>
+           <a-menu-item key="/wholesale/inventory">
+            批发中心产品销售
+          </a-menu-item>
+           <a-menu-item key="/wholesale/inStock">
+            批发中心产品库存
+          </a-menu-item>
+           <a-menu-item key="/wholesale/inventory">
+            批发中心产品盘点
+          </a-menu-item>
+        </a-sub-menu>
+
+        <a-sub-menu key="/production">
+          <template #title><span><BgColorsOutlined /><span>生产基地系统</span></span></template>
+           <a-menu-item key="/production/planning">
+            生产计划查询
+          </a-menu-item>
+          <a-menu-item key="/production/inStock">
+            生产基地产品库存
+          </a-menu-item>
+           <a-menu-item key="/production/inventory">
+            生产基地产品盘点
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            生产基地产品出/入库
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            生产基地物资出/入库
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            生产基地物资库存查询
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            生产基地物资盘点
+          </a-menu-item>
+        </a-sub-menu>
+
+        <a-sub-menu key="/production" titleClick="handleTitleClick">
+          <template #title><span><BgColorsOutlined /><span>代购点系统</span></span></template>
+           <a-menu-item key="/production/planning">
+            农户信息
+          </a-menu-item>
+          <a-menu-item key="/production/inStock">
+            产品出库
+          </a-menu-item>
+           <a-menu-item key="/production/inStock">
+            产品收购
+          </a-menu-item>
+           <a-menu-item key="/production/inventory">
+            产品库存查询
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            代购点产品盘点
+          </a-menu-item>
+           <a-menu-item key="/production/inventory">
+            代购点物资出/入库
+          </a-menu-item>
+           <a-menu-item key="/production/inventory">
+            代购点物资库存查询
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            代购点物资盘点
+          </a-menu-item>
+          <a-menu-item key="/production/inventory">
+            生产计划查询
+          </a-menu-item>
+        </a-sub-menu>
+<!--        <a-menu-item key="/production">-->
+<!--          <BgColorsOutlined />-->
+<!--          <span>生产基地系统</span>-->
+<!--        </a-menu-item>-->
+<!--        <a-menu-item key="/wholesale">-->
+<!--          <CarOutlined />-->
+<!--          <span>批发中心系统</span>-->
+<!--        </a-menu-item>-->
         <a-menu-item key="/purchasing">
           <FileOutlined />
           <span>代购点系统</span>
@@ -68,6 +163,7 @@ const currentPath = ref<string>(route.path);
 const selectedKeys = ref<string[]>([currentPath.value]);
 const isLoginOutOpen = ref<boolean>(false);
 const collapsed = ref<boolean>(false);
+const openKeys = ref<string[]>([])
 import {useUserInfoStore} from "@/stores/userInfo";
 import {removeToken} from "@/request/auth";
 import {message} from "ant-design-vue";
@@ -76,6 +172,7 @@ const username = localStorage.getItem('planning-system-username');
 const handleClick = async (e : any) => {
   selectedKeys.value = [e.key];
   await router.push(e.key);
+  console.log(openKeys.value,'4567')
 };
 
 const confirm = () => {

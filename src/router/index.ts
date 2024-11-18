@@ -41,24 +41,76 @@ const router = createRouter({
         },
         //   嘉农相关路由在下面
         {
+          // 公司系统
           path:'/enterprise',
           name:'enterprise',
-          component:()=>import('@/views/Enterprise/index.vue')
+          children:[
+            {
+              path:'productInfo',
+              name:'productInfo',
+              component:()=>import('@/views/Enterprise/ProductInfo/index.vue')
+            },
+            {
+              path: 'acquisition',
+              name:'acquisition',
+              component:()=>import('@/views/Enterprise/Acquisition/index.vue')
+            },
+            {
+              path:'inOutBound',
+              name:'inOutBound',
+              component:()=>import('@/views/Enterprise/InOutBound/index.vue')
+            },
+            {
+              path:'inventory',
+              name:'EnterpriseInventory',
+              component:()=>import('@/views/Enterprise/Inventory/index.vue')
+            }
+          ]
         },
         {
+          // 生产基地系统
           path:'/production',
           name:'production',
-          component:()=>import('@/views/Production/index.vue')
+          children:[
+              {
+                path:'inventory',
+                name:'ProductionInventory',
+                component:()=>import('@/views/Production/Inventory/index.vue')
+              },
+              {
+                path:'inStock',
+                name:'ProductionInStock',
+                component:()=>import('@/views/Production/InStock/index.vue')
+              },
+              {
+                path:'planning',
+                name:'ProductionPlanning',
+                component:()=>import('@/views/Production/Planning/index.vue')
+              }
+          ]
         },
         {
+          // 代购点系统
           path:'/purchasing',
           name:'purchasing',
           component:()=>import('@/views/Purchasing/index.vue')
         },
         {
+          // 批发中心系统
           path: '/wholesale',
           name:'wholesale',
-          component:()=>import('@/views/Wholesale/index.vue')
+          children:[
+              {
+                path:'inventory',
+                name:'WholesaleInventory',
+                component:()=>import('@/views/Wholesale/Inventory/index.vue')
+              },
+            {
+              path:'inStock',
+              name:'WholeSaleInStock',
+              component:()=>import('@/views/Wholesale/InStock/index.vue')
+            }
+          ]
         }
       ]
     },
