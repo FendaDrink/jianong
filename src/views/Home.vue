@@ -4,7 +4,7 @@
       <div class="logo">
         <span v-if="!collapsed" style="white-space:nowrap;">嘉农管理系统</span>
       </div>
-      <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" >
+      <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" @openChange="handleOpenChange">
         <a-sub-menu key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
           <a-menu-item key="/enterprise/productInfo">
@@ -147,17 +147,21 @@ const currentPath = ref<string>(route.path);
 const selectedKeys = ref<string[]>([currentPath.value]);
 const isLoginOutOpen = ref<boolean>(false);
 const collapsed = ref<boolean>(false);
-const openKeys = ref<string[]>([])
+const openKeys = ref<string[]>(['/'+currentPath.value.split('/')[1]])
 import {useUserInfoStore} from "@/stores/userInfo";
 import {removeToken} from "@/request/auth";
 import {message} from "ant-design-vue";
 const userInfoStore = useUserInfoStore();
 const username = localStorage.getItem('planning-system-username');
-const handleClick = async (e : any) => {
-  selectedKeys.value = [e.key];
-  await router.push(e.key);
+const handleClick = async ({key, keyPath}: any) => {
+  selectedKeys.value = [key];
+  await router.push(key);
+  openKeys.value = [keyPath[0]]
 };
 
+const handleOpenChange = (keys: string []) => {
+  openKeys.value = keys.slice(0, 2);
+}
 const confirm = () => {
   Modal.confirm({
     title: '退出',
