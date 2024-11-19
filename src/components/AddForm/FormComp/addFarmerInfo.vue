@@ -16,44 +16,7 @@
         <a-form-item label="播种面积" v-bind="validateInfos.area">
           <a-input v-model:value="modelRef.area" />
         </a-form-item>
-        <!-- <a-form-item label="线速" v-bind="validateInfos.speed">
-          <a-input type="number" v-model:value="modelRef.speed" />
-        </a-form-item>
-      </a-col>
-  
-      <a-col :span="12" style="float: left;margin-left: 70px">
-        <a-form-item label="生产线类型" v-bind="validateInfos.type" :wrapper-col="{span:14}">
-          <a-select v-model:value="modelRef.type" placeholder="请选择生产线类型">
-            <a-select-option value="车身">车身</a-select-option>
-            <a-select-option value="涂装">涂装</a-select-option>
-            <a-select-option value="总装">总装</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item label="生产线班次" v-bind="validateInfos.classes">
-          <a-input type="number" v-model:value="modelRef.classes" />
-        </a-form-item>
-        <a-form-item label="运行效率" v-bind="validateInfos.efficiency">
-          <a-input type="number" v-model:value="modelRef.efficiency" />
-        </a-form-item>
-      </a-col>
-  
-      <a-col :span="8" style="float: left;">
-        <a-form-item label="生产线分组" v-bind="validateInfos.group" :label-col="{span:10}" :wrapper-col="{span:23,offset:0}">
-          <a-input type="number" v-model:value="modelRef.group"  />
-        </a-form-item>
-      </a-col>
-  
-      <a-col :span="8" style="float: left">
-        <a-form-item label="流向代码" v-bind="validateInfos.flow" :wrapper-col="{span:12,offset:0}" >
-          <a-input type="number" v-model:value="modelRef.flow"  />
-        </a-form-item>
-      </a-col>
-  
-      <a-col :span="8" style="float: left;margin-left: -30px">
-        <a-form-item label="生产线编号简称" v-bind="validateInfos.simple" :label-col="{span:12}" :wrapper-col="{span:28,offset:0}" >
-          <a-input v-model:value="modelRef.simple"  />
-        </a-form-item> -->
-      </a-col>
+         </a-col>
       <template style="clear: both"></template>
       <a-col style="float: left;width: 240px;margin: 30px 250px 0 250px">
         <a-form-item >
