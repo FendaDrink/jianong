@@ -89,4 +89,25 @@ export const uploadFile = async (params:UnwrapNestedRefs<UploadFileAPIReq>):Prom
 })
 
 /* 批量删除订单车记录 */
-export const deleteOrderCarBatch = (params:UnwrapNestedRefs<DeleteOrdersAPIReq>):Promise<DeleteOrdersAPIRes> => request.post('/car/deleteBatch',params);
+export const deleteOrderCarBatch = (params:UnwrapNestedRefs<any>):Promise<DeleteOrdersAPIRes> => request.post('/car/deleteBatch',params);
+// 代购点
+// 农户增删改查
+export const addFarmerInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/farmer',params);
+export const deleteFarmerInfo = (key:string):Promise<any> => request.delete('/purchasing/farmer/${key}');
+export const updateFarmerInfo = (params:UnwrapNestedRefs<any>):Promise<UpdateOrderAPIRes> => request.patch('/purchasing/farmer',params);
+export const getFarmerInfo = ():Promise<any> => request.get('/purchasing/farmer');
+// 产品管理
+// 查询代购点产品库存
+export const getProductstock = ():Promise<any> => request.get('/purchasing/stock');
+// 查询代购点商品新增几个
+export const getProducInstock = ():Promise<any> => request.get('/purchasing/inStock');
+// 产品收购
+export const purchasingInstock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/inStock',params);
+// 查询代购点出入库记录
+export const checkOutStock = ():Promise<any> => request.get('/purchasing/outStock');
+// 产品出库
+export const purchasingOutstock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/outStock',params)
+// 获取代购点物资库存
+export const getPurInventory = ():Promise<any> => request.get('/purchasing/inventory');
+// 代购点产品盘点
+export const purchasingUpdateStock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/updateStock',params)

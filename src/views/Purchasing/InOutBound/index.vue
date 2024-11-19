@@ -66,7 +66,7 @@ import Test from '@/components/AddForm/FormComp/ImportFile.vue'
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {deleteOrderCar, deleteOrderCarBatch, getOrderCar, updateOrderCar} from "@/request/api";
+import {checkOutStock} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
 import moment from 'moment'
@@ -91,6 +91,7 @@ interface titleItem{
   onFilter?:Function;
   sorter?:Function;
 }
+
 
 const inputType = new Map([
   ['orderId','text'],
@@ -229,10 +230,12 @@ const onReset = async () => {
   message.success('重置成功');
 }
 
-// 获取订单车数据
+// 获取出库数据
 const getData = async () => {
   loading.value = true;
-  let res = await getOrderCar();
+  let res = await checkOutStock();
+  console.log(res,'hjhjjh');
+  
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value[0].fixed = 'left';
