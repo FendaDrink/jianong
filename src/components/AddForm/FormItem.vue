@@ -23,12 +23,12 @@ const currentComponent = () => {
       return EngineForm;
     case "/car":
       return CarForm;
-    // case "/farmerInfo":
-    //   return AddFarmerInfo;
-    // case "/accessProduct":
-    //   return purchasOutStock;
-    // case "acquireProduct":
-    //   return purchasInStock;
+    case "/purchasing/farmerInfo":
+      return AddFarmerInfo;
+    case "/purchasing/accessProduct":
+      return purchasOutStock;
+    case "/purchasingacquireProduct":
+      return purchasInStock;
     default:
       return PublicForm;
   }
