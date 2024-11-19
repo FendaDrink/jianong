@@ -14,21 +14,19 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
       style="margin-top:5px"
       :locale="localeOption"
-      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange}"
   >
+<!--    :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange}"-->
     <template #bodyCell="{ column, text, record }">
       <div>
         <template v-if="dataIndexArr.includes(column.dataIndex)">
           <a-input
               :label="column.dataIndex"
-              v-if="editableData[record.key] && column.dataIndex !== 'user' && column.dataIndex !== 'time'"
+              v-if="editableData[record.key]"
               :type="inputType.get(column.dataIndex)"
               v-model:value="editableData[record.key][column.dataIndex]"
               style="margin: -5px 0;"
-              :disabled="column.dataIndex === 'chpnumber'"
           />
           <div v-else style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
             {{ text?text:'/' }}
@@ -63,7 +61,8 @@ import Dialogue from "@/components/AddForm/Dialogue.vue";
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {getProductInfo, updateProductInfo, deleteProductInfo} from '@/request/enterprise'
+import {getInstitution, updateInstitution, deleteInstitution} from "@/request/enterprise";
+// import {getProductInfo, updateProductInfo, deleteProductInfo} from '@/request/enterprise'
 import {deleteOrderCarBatch} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
@@ -88,14 +87,10 @@ interface titleItem{
 }
 
 const inputType = new Map([
-  ['chpnumber', 'text'],
-  ['mch', 'text'],
-  ['class', 'text'],
+  ['number', 'text'],
+  ['jgname', 'text'],
+  ['type', 'text'],
   ['address', 'text'],
-  ['jdnumber', 'text'],
-  ['pznumber', 'text'],
-  ['price', 'number'],
-  ['package', 'text']
 ]);
 
 const localeOption = {
@@ -123,14 +118,10 @@ const columns = ref<titleItem[]>([]);
 interface DataItem {
   key:string;
   id: string;
-  chpnumber: string;
-  mch: string;
-  class: string;
+  number: string;
+  jgname: string;
+  type: string;
   address: string;
-  jdnumber: string;
-  pzname: string;
-  price: number;
-  package: string;
 }
 
 const drawerStore = useDrawerStore();
@@ -155,7 +146,7 @@ const cancel = (key: string) => {
 };
 
 const deleteItem = async (key:string) => {
-  let res = await deleteProductInfo(key);
+  let res = await deleteInstitution(key);
   if(res.data.code === 200){
     message.success('删除成功');
     await getData();
@@ -172,14 +163,10 @@ const onSearch = () => {
   const keywords = searchContent.value.trim().toLowerCase()
   dataSource.value =  dataSourceCopy.value.filter(item => {
    return (
-    item.chpnumber.toLowerCase().includes(keywords) ||
-    item.mch.toLowerCase().includes(keywords) ||
-    item.class.toLowerCase().includes(keywords) ||
-    item.address.toLowerCase().includes(keywords) ||
-    item.jdnumber.toLowerCase().includes(keywords) ||
-    item.price?.toString().toLowerCase().includes(keywords) ||
-    item.pzname.toLowerCase().includes(keywords) ||
-    item.package.toLowerCase().includes(keywords)
+    item.number.toLowerCase().includes(keywords) ||
+    item.jgname.toLowerCase().includes(keywords) ||
+    item.type.toLowerCase().includes(keywords) ||
+    item.address.toLowerCase().includes(keywords)
   )
   });
   if(dataSource.value.length>0){
@@ -201,15 +188,16 @@ const onReset = async () => {
 // 获取订单车数据
 const getData = async () => {
   loading.value = true;
-  let res = await getProductInfo();
+  let res = await getInstitution();
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value = columns.value.filter(item=>item.dataIndex!=='key')
   columns.value[0].fixed = 'left';
+  // columns.value[0].width = 20;
   columns.value.push({
     title: '操作',
     dataIndex: 'operation',
-    width:150,
+    width: 20,
     fixed:'right'
   })
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
@@ -234,12 +222,12 @@ const onSelectChange = (selectedRowKeys: string[]) => {
 
 const update= async (key:string) => {
   for(let item of Object.keys(editableData[key])) {
-    if(editableData[key][item] === null || editableData[key][item] === ''){
+    if(editableData[key][item] === ''){
       return message.error(`有部分字段未填写`);
     }
   }
   try{
-    let res = await updateProductInfo(editableData[key]);
+    let res = await updateInstitution(editableData[key]);
     if(res.data.code === 200){
       message.success('修改成功');
       await getData();

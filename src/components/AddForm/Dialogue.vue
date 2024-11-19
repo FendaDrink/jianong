@@ -45,7 +45,9 @@ const title = computed(() => {
     case '/car':
       return '订单车录入';
     case '/enterprise/productInfo':
-      return '添加产品';
+      return '产品信息录入';
+    case '/enterprise/institute':
+      return '机构信息录入';
     case '/purchasing/farmerInfo':
       return '农户信息录入';
     case '/purchasing/accessProduct':

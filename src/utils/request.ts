@@ -10,7 +10,7 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 // 创建axios实例
 const service = axios.create({
-    baseURL: 'http://192.168.119.193:3000',
+    baseURL: 'http://localhost:3000',
     timeout:10000,
 });
 
