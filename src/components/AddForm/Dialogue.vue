@@ -1,16 +1,31 @@
 <template>
-    <a-button type="primary" @click="showModal" style="float: right;margin-right: 30px">新增</a-button>
-    <a-modal ref="modalRef" v-model:open="addFormStore.open" :wrap-style="{ overflow: 'hidden' }"  :footer="null" @ok="handleOk" cancel-text="取消" ok-text="提交">
-      <template #title>
-        <div ref="modalTitleRef" style="width: 100%; cursor: move">{{ title }}</div>
-      </template>
-      <AddForm/>
-      <template #modalRender="{ originVNode }">
-        <div :style="transformStyle" >
-          <component :is="originVNode" />
-        </div>
-      </template>
-    </a-modal>
+  <a-button
+    type="primary"
+    @click="showModal"
+    style="float: right; margin-right: 30px"
+    >新增</a-button
+  >
+  <a-modal
+    ref="modalRef"
+    v-model:open="addFormStore.open"
+    :wrap-style="{ overflow: 'hidden' }"
+    :footer="null"
+    @ok="handleOk"
+    cancel-text="取消"
+    ok-text="提交"
+  >
+    <template #title>
+      <div ref="modalTitleRef" style="width: 100%; cursor: move">
+        {{ title }}
+      </div>
+    </template>
+    <AddForm />
+    <template #modalRender="{ originVNode }">
+      <div :style="transformStyle">
+        <component :is="originVNode" />
+      </div>
+    </template>
+  </a-modal>
 </template>
 <script lang="ts" setup>
 import AddForm from '@/components/AddForm/FormItem.vue'
@@ -31,6 +46,12 @@ const title = computed(() => {
       return '订单车录入';
     case '/enterprise/productInfo':
       return '添加产品';
+    case '/farmerInfo':
+      return '农户信息录入';
+    case '/accessProduct':
+      return '产品出库';
+    case 'acquireProduct':
+      return '产品收购'
     default:
       return '基础数据录入';
   }

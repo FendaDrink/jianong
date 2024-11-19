@@ -74,7 +74,7 @@ const router = createRouter({
               },
               {
                 path:'inStock',
-                name:'ProductInStock',
+                name:'InStock',
                 component:()=>import('@/views/Production/InStock/index.vue')
               },
               {
@@ -84,29 +84,27 @@ const router = createRouter({
               },
               {
                 path:'accessProduct',
-                name:'ProductionAccessProduct',
+                name:'AccessProduct',
                 component:()=>import('@/views/Production/AccessProduct/index.vue')
               },
               {
                 path:'accessInventory',
-                name:'ProductionAccessInventory',
+                name:'AccessInventory',
                 component:()=>import('@/views/Production/AccessInventory/index.vue')
               },
               {
                 path:'checkInventory',
-                name:'ProductionCheckInventory',
+                name:'CheckInventory',
                 component:()=>import('@/views/Production/CheckInventory/index.vue')
               },
               {
                 path:'takeStock',
-                name:'ProductionTakeStock',
+                name:'TakeStock',
                 component:()=>import('@/views/Production/TakeStock/index.vue')
               },
-            {
-              path:'productInventory',
-              name:'ProductInventory',
-              component:()=>import('@/views/Production/ProductInventory/index.vue')
-            },
+              
+
+             
           ]
         },
         {
@@ -143,7 +141,7 @@ const router = createRouter({
               component:()=>import('@/views/Purchasing/IventoryConsign/index.vue')
             },
             {
-              path:'AccessInventory',
+              path:'accessInventory',
               name:'AccessInventory',
               component:()=>import('@/views/Purchasing/AccessInventory/index.vue')
             },

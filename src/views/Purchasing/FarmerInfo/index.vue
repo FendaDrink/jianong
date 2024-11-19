@@ -66,7 +66,7 @@ import Test from '@/components/AddForm/FormComp/ImportFile.vue'
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {deleteOrderCar, deleteOrderCarBatch, getOrderCar, updateOrderCar} from "@/request/api";
+import {deleteFarmerInfo, deleteOrderCarBatch, getFarmerInfo, updateFarmerInfo} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
 import moment from 'moment'
@@ -133,6 +133,8 @@ const dataIndexArr = ref<string[]>([]);
 
 const columns = ref<titleItem[]>([]);
 
+ 
+
 type OrderId = string;
 
 interface DataItem {
@@ -174,16 +176,17 @@ const edit = (orderId: string) => {
 const cancel = (key: string) => {
   delete editableData[key];
 };
-
+// 删除农户信息
 const deleteItem = async (orderId:string) => {
-  let res = await deleteOrderCar(orderId);
+  let res = await deleteFarmerInfo(orderId);
   if(res.data.code === 200){
     message.success('删除成功');
-    await getData();
+    await getFarmerInfoDetail();
   }else{
     message.error('删除失败');
   }
 }
+// 删不掉哈
 
 const onSearch = () => {
   if(!searchContent.value && !selectedYear.value){
@@ -224,16 +227,19 @@ const onReset = async () => {
   if(searchContent.value || selectedYear.value){
     searchContent.value = '';
     selectedYear.value = undefined;
-    await getData();
+    await getFarmerInfoDetail();
   }
   message.success('重置成功');
 }
 
-// 获取订单车数据
-const getData = async () => {
+// 获取农户信息
+const getFarmerInfoDetail = async () => {
   loading.value = true;
-  let res = await getOrderCar();
-  columns.value = [...res.data.data.title];
+  let res = await getFarmerInfo();
+console.log(res,'klkl');
+
+columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id');
+
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value[0].fixed = 'left';
   columns.value.push({
@@ -267,14 +273,16 @@ const onSelectChange = (selectedRowKeys: OrderId[]) => {
   console.log('selectedRowKeys changed: ', selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
 };
-
+// 农户信息修改
 const update= async (orderId:string) => {
   if(editableData[orderId]['year']>2100 || editableData[orderId]['year']<1900) return message.warn('请输入正确的年份');
   try{
-    let res = await updateOrderCar(editableData[orderId]);
+    let res = await updateFarmerInfo(editableData[orderId]);
+    
+    
     if(res.data.code === 200){
       message.success('修改成功');
-      await getData();
+      await getFarmerInfoDetail();
       delete editableData[orderId];
     }
   }catch (err:any){
@@ -318,7 +326,7 @@ const showDeleteConfirm = () => {
       message.success('删除成功');
       state.selectedRowKeys = [];
       try{
-        await getData();
+        await getFarmerInfoDetail();
       }catch (err){
         console.log(err)
       }
@@ -332,18 +340,18 @@ const selectHanlder = (value:any)=>{
 
 watch(combinedWatch, async (newValue, oldValue) => {
   if ((oldValue.open && !newValue.open) || (oldValue.openInsert && !newValue.openInsert)) {
-    await getData();
+    await getFarmerInfoDetail();
   }
 });
 
 watch(()=>drawerStore.open,async (newValue,oldValue)=>{
   if(oldValue && !newValue){
-    await getData();
+    await getFarmerInfoDetail();
   }
 })
 
 onMounted(async () => {
-  await getData();
+  await getFarmerInfoDetail();
 })
 
 </script>

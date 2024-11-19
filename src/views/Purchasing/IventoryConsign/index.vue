@@ -66,7 +66,7 @@ import Test from '@/components/AddForm/FormComp/ImportFile.vue'
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {deleteOrderCar, deleteOrderCarBatch, getOrderCar, updateOrderCar} from "@/request/api";
+import {getProductstock ,purchasingUpdateStock} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
 import moment from 'moment'
@@ -167,9 +167,31 @@ const check =  async (orderId:string) => {
   drawerStore.orderId = orderId;
 }
 
-const edit = (orderId: string) => {
+const edit = async  (orderId: string) => {
   editableData[orderId] = cloneDeep(dataSource.value.filter(item => orderId === item.orderId)[0]);
+
+  const requestData = {
+    chpnumber: editableData.chpnumber, // 假设 carCode 是 chpnumber 的值
+    remain: editableData.remain || 0, // 假设 stall 是 remain 的值
+  };
+  try {
+    // 发起 POST 请求
+    const res = await purchasingUpdateStock(requestData);
+
+    if (res.data.code === 200) {
+      message.success("编辑成功");
+      await getData(); // 重新获取数据更新表格
+    } else {
+      message.error(res.data.message || "编辑失败");
+    }
+  } catch (error) {
+    console.error("编辑请求失败:", error);
+    message.error("编辑失败，请稍后重试");
+  }
 };
+
+
+
 
 const cancel = (key: string) => {
   delete editableData[key];
@@ -232,7 +254,7 @@ const onReset = async () => {
 // 获取订单车数据
 const getData = async () => {
   loading.value = true;
-  let res = await getOrderCar();
+  let res = await getProductstock();
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value[0].fixed = 'left';
