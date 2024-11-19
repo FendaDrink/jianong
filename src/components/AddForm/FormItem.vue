@@ -30,6 +30,8 @@ const currentComponent = () => {
       return purchasOutStock;
     case "/purchasingacquireProduct":
       return purchasInStock;
+    case "/enterprise/productInfo":
+      return ProductInfoForm;
     default:
       return PublicForm;
   }

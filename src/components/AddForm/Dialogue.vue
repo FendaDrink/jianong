@@ -46,11 +46,11 @@ const title = computed(() => {
       return '订单车录入';
     case '/enterprise/productInfo':
       return '添加产品';
-    case '/farmerInfo':
+    case '/purchasing/farmerInfo':
       return '农户信息录入';
-    case '/accessProduct':
+    case '/purchasing/accessProduct':
       return '产品出库';
-    case 'acquireProduct':
+    case '/purchasing/acquireProduct':
       return '产品收购'
     default:
       return '基础数据录入';
