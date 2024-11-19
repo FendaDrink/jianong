@@ -160,7 +160,7 @@ const handleClick = async ({key, keyPath}: any) => {
 };
 
 const handleOpenChange = (keys: string []) => {
-  openKeys.value = keys.slice(0, 2);
+  openKeys.value = [keys.pop() as any]
 }
 const confirm = () => {
   Modal.confirm({
