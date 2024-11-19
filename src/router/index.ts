@@ -54,6 +54,11 @@ const router = createRouter({
               path:'planning',
               name:'EnterprisePlanning',
               component:()=>import('@/views/Enterprise/Planning/index.vue')
+            },
+            {
+              path: 'institute',
+              name: 'institute',
+              component:()=>import('@/views/Enterprise/Institution/index.vue')
             }
           ]
         },

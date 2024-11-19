@@ -209,7 +209,7 @@ const getData = async () => {
   columns.value.push({
     title: '操作',
     dataIndex: 'operation',
-    width:150,
+    width:40,
     fixed:'right'
   })
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
