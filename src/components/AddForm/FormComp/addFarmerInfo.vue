@@ -10,6 +10,8 @@
         <a-form-item label="农户地址" v-bind="validateInfos.address">
           <a-input v-model:value="modelRef.address" />
         </a-form-item >
+      </a-col>
+        <a-col>
         <a-form-item label="电话" v-bind="validateInfos.tel">
           <a-input v-model:value="modelRef.tel" />
         </a-form-item>
