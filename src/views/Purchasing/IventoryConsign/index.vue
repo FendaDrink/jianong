@@ -2,14 +2,13 @@
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
   <h1 style="font-size: 28px;margin-bottom: 20px">代购点产品盘点</h1>
-  <Dialogue/>
+ 
   <span style="height: 32px;">
-    <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
-    <a-date-picker v-model:value="selectedYear" picker="year" style="margin-left: 10px" @panelChange="selectHanlder" placeholder="按年份查询订单车"/>
+    <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/> 
     <a-button type="primary" @click="onSearch" style="margin-left: 10px">搜索</a-button>
     <a-button type="default" style="margin-left: 10px" @click="onReset">重置</a-button>
     <a-button type="dashed"  :disabled="!hasSelected" style="margin-left: 10px" @click="showDeleteConfirm">批量删除</a-button>
-    <Test/>
+ 
   </span>
   <a-table
       row-key="orderId"
