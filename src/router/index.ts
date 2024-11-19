@@ -54,6 +54,11 @@ const router = createRouter({
               path:'planning',
               name:'EnterprisePlanning',
               component:()=>import('@/views/Enterprise/Planning/index.vue')
+            },
+            {
+              path: 'institute',
+              name: 'institute',
+              component:()=>import('@/views/Enterprise/Institution/index.vue')
             }
           ]
         },
@@ -138,7 +143,7 @@ const router = createRouter({
             {
               path:'accessInventory',
               name:'AccessInventory',
-              component:()=>import('@/views/Purchasing/accessInventory/index.vue')
+              component:()=>import('@/views/Purchasing/AccessInventory/index.vue')
             },
             {
               path:'checkInventory',

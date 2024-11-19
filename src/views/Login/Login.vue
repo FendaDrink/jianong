@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="inner">
         <div class="form-inner">
-          <div class="title">生产线计划系统</div>
+          <div class="title">嘉农管理系统</div>
           <a-form
               :model="formState"
               name="basic"

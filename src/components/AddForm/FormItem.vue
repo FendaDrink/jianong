@@ -10,6 +10,7 @@ import PublicForm from "@/components/AddForm/FormComp/PublicForm.vue";
 import ColorForm from "@/components/AddForm/FormComp/ColorForm.vue";
 import EngineForm from "@/components/AddForm/FormComp/EngineForm.vue";
 import CarForm from "@/components/AddForm/FormComp/CarForm.vue";
+import ProductInfoForm from "@/components/AddForm/FormComp/ProductInfoForm.vue"
 import AddFarmerInfo from "@/components/AddForm/FormComp/addFarmerInfo.vue";
 import purchasOutStock from "@/components/AddForm/FormComp/purchasOutStock.vue";
 import purchasInStock from "./FormComp/purchasInStock.vue";

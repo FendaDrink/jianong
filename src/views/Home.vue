@@ -8,7 +8,7 @@
         <a-sub-menu key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
           <a-menu-item key="/enterprise/productInfo">
-            产品信息
+            产品信息管理
           </a-menu-item>
           <a-menu-item key="/enterprise/acquisition">
             产品收购
@@ -21,6 +21,9 @@
           </a-menu-item>
           <a-menu-item key="/enterprise/inventory">
             公司物资盘点
+          </a-menu-item>
+          <a-menu-item key="/enterprise/institute">
+            机构信息管理
           </a-menu-item>
           <a-menu-item key="/enterprise/planning">
             生产计划制定
