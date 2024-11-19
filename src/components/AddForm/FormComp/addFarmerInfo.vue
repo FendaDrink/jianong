@@ -52,8 +52,8 @@
       <a-col :span="8" style="float: left;margin-left: -30px">
         <a-form-item label="生产线编号简称" v-bind="validateInfos.simple" :label-col="{span:12}" :wrapper-col="{span:28,offset:0}" >
           <a-input v-model:value="modelRef.simple"  />
-        </a-form-item>
-      </a-col> -->
+        </a-form-item> -->
+      </a-col>
       <template style="clear: both"></template>
       <a-col style="float: left;width: 240px;margin: 30px 250px 0 250px">
         <a-form-item >

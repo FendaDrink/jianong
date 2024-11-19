@@ -56,6 +56,8 @@ declare module 'vue' {
     FarmDrawer: typeof import('./src/components/CheckForm/FarmDrawer.vue')['default']
     FormItem: typeof import('./src/components/AddForm/FormItem.vue')['default']
     ImportFile: typeof import('./src/components/AddForm/FormComp/ImportFile.vue')['default']
+    ProductInfo: typeof import('./src/components/AddForm/FormComp/ProductInfoForm.vue')['default']
+    ProductInfoForm: typeof import('./src/components/AddForm/FormComp/ProductInfoForm.vue')['default']
     PublicForm: typeof import('./src/components/AddForm/FormComp/PublicForm.vue')['default']
     PurchasInStock: typeof import('./src/components/AddForm/FormComp/purchasInStock.vue')['default']
     PurchasOutStock: typeof import('./src/components/AddForm/FormComp/purchasOutStock.vue')['default']
