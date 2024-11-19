@@ -5,11 +5,10 @@
   <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
-    <a-date-picker v-model:value="selectedYear" picker="year" style="margin-left: 10px" @panelChange="selectHanlder" placeholder="按年份查询订单车"/>
     <a-button type="primary" @click="onSearch" style="margin-left: 10px">搜索</a-button>
     <a-button type="default" style="margin-left: 10px" @click="onReset">重置</a-button>
     <a-button type="dashed"  :disabled="!hasSelected" style="margin-left: 10px" @click="showDeleteConfirm">批量删除</a-button>
-    <Test/>
+    <!-- <Test/> -->
   </span>
   <a-table
       row-key="orderId"
@@ -138,22 +137,13 @@ const columns = ref<titleItem[]>([]);
 type OrderId = string;
 
 interface DataItem {
-  orderId:OrderId;
-  year:number|null;
-  inTime:string;
-  type:string;
-  airCode:string;
-  colorCode:number|null;
-  batchNum:string;
-  carNum:number|null;
-  varietyCode:string;
-  carCode:string;
-  stall:number|null;
-  engineCode:string;
-  customer:string;
-  orderBatchNum:string;
-  requirements:string;
-  remark:string;
+  key:OrderId; 
+  number:string;
+  nhname:string;
+  address:string;
+  tel:number|null;
+  area:string;
+ 
 }
 
 const drawerStore = useDrawerStore();
@@ -193,28 +183,21 @@ const onSearch = () => {
     return message.warn('搜索不能为空');
   }
   loading.value = true;
+  const keywords = searchContent.value.trim().toLowerCase()
   dataSource.value =  dataSourceCopy.value.filter(item => {
     return (
             (searchContent.value &&
-            (item.orderId.includes(searchContent.value) ||
-            item.year!.toString().includes(searchContent.value) ||
-            item.inTime.includes(searchContent.value) ||
-            item.type.includes(searchContent.value) ||
-            item.airCode.includes(searchContent.value) ||
-            item.colorCode!.toString().includes(searchContent.value) ||
-            item.batchNum.includes(searchContent.value) ||
-            item.carNum!.toString().includes(searchContent.value) ||
-            item.varietyCode.includes(searchContent.value) ||
-            item.carCode.includes(searchContent.value) ||
-            item.stall!.toString().includes(searchContent.value) ||
-            item.engineCode.includes(searchContent.value) ||
-            item.customer.includes(searchContent.value) ||
-            item.orderBatchNum.includes(searchContent.value) ||
-            item.requirements.includes(searchContent.value) ||
-            item.remark.includes(searchContent.value)))||
-            item.year!.toString().includes(selectedYear!.value!.year())
+            (item.key.includes(searchContent.value) ||
+              item.number.toLowerCase().includes(keywords) ||
+              item.nhname.toLowerCase().includes(keywords) ||
+              item.address?.toString().toLowerCase().includes(keywords) ||
+              item.tel?.toString().toLowerCase().includes(keywords) ||
+              item.area?.toString().toLowerCase().includes(keywords) 
+               
+            ))
     )
   });
+  
   if(dataSource.value.length>0){
     message.success('搜索成功')
   }else{
