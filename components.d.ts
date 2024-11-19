@@ -54,6 +54,8 @@ declare module 'vue' {
     EngineForm: typeof import('./src/components/AddForm/FormComp/EngineForm.vue')['default']
     FormItem: typeof import('./src/components/AddForm/FormItem.vue')['default']
     ImportFile: typeof import('./src/components/AddForm/FormComp/ImportFile.vue')['default']
+    ProductInfo: typeof import('./src/components/AddForm/FormComp/ProductInfoForm.vue')['default']
+    ProductInfoForm: typeof import('./src/components/AddForm/FormComp/ProductInfoForm.vue')['default']
     PublicForm: typeof import('./src/components/AddForm/FormComp/PublicForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

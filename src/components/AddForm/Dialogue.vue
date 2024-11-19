@@ -29,6 +29,8 @@ const title = computed(() => {
       return '计划用颜色录入';
     case '/car':
       return '订单车录入';
+    case '/enterprise/productInfo':
+      return '添加产品';
     default:
       return '基础数据录入';
   }
