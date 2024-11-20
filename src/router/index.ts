@@ -36,9 +36,14 @@ const router = createRouter({
               component:()=>import('@/views/Enterprise/Acquisition/index.vue')
             },
             {
-              path:'inOutBound',
-              name:'inOutBound',
-              component:()=>import('@/views/Enterprise/InOutBound/index.vue')
+              path:'inBound',
+              name:'enterpriseInBound',
+              component:()=>import('@/views/Enterprise/InOutBound/in.vue')
+            },
+            {
+              path:'outBound',
+              name:'enterpriseOutBound',
+              component:()=>import('@/views/Enterprise/InOutBound/out.vue')
             },
             {
               path:'inventory',
@@ -111,7 +116,6 @@ const router = createRouter({
           // 代购点系统
           path:'purchasing',
           name:'purchasing',
-          // component:()=>import('@/views/Purchasing/index.vue'),
           children:[
             {
               path:'farmerInfo',
@@ -143,7 +147,12 @@ const router = createRouter({
             {
               path:'accessInventory',
               name:'AccessInventory',
-              component:()=>import('@/views/Purchasing/AccessInventory/index.vue')
+              component:()=>import('@/views/Purchasing/AccessInventory/in.vue')
+            },
+              {
+              path:'accessOutInventory',
+              name:'AccessOutInventory',
+              component:()=>import('@/views/Purchasing/AccessInventory/out.vue')
             },
             {
               path:'checkInventory',

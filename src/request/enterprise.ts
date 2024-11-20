@@ -43,3 +43,21 @@ export const updateProductionPlan = (params: UnwrapNestedRefs<any>):Promise<any>
 
 /* 删除生产计划 */
 export const deleteProductionPlan = (key: string):Promise<any> => request.delete('/enterprise/deletePlan/'+key);
+
+/* 获取公司物资库存 */
+export const getInventory = ():Promise<any> => request.get('/enterprise/inventory');
+
+/* 公司物资盘点 */
+export const updateInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/enterprise/updateInventory',params)
+
+/* 获取物资入库记录 */
+export const getInInventory = ():Promise<any> => request.get('/enterprise/inInventory');
+
+/* 物资入库 */
+export const addInInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/enterprise//inInventory',params)
+
+/* 获取物资出库记录 */
+export const getOutInventory = ():Promise<any> => request.get('/enterprise/outInventory');
+
+/* 物资出库 */
+export const addOutInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/enterprise/outInventory',params)

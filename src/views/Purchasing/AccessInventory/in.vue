@@ -1,7 +1,7 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">物资入库</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">代购点物资入库</h1>
   <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
@@ -39,7 +39,7 @@ import Dialogue from "@/components/AddForm/Dialogue.vue";
 import { message } from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import { useDrawerStore } from "@/stores/drawer";
-import { getInInventory } from '@/request/enterprise'
+import { getInInventory } from "@/request/api";
 import { useAddFormStore } from "@/stores/addForm";
 import { cloneDeep } from "lodash-es";
 import moment from "moment";

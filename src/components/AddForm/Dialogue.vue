@@ -38,22 +38,24 @@ const addFormStore = useAddFormStore();
 const modalTitleRef = ref<HTMLElement>(null);
 const title = computed(() => {
   switch(path){
-    case '/engine':
-      return '特殊发动机录入';
-    case '/color':
-      return '计划用颜色录入';
-    case '/car':
-      return '订单车录入';
     case '/enterprise/productInfo':
       return '产品信息录入';
     case '/enterprise/institute':
       return '机构信息录入';
     case '/purchasing/farmerInfo':
       return '农户信息录入';
+    case '/enterprise/inBound':
+      return '物资入库'
+    case '/enterprise/outBound':
+      return '物资入库'
     case '/purchasing/accessProduct':
-      return '产品出库';
+      return '代购点产品出库';
     case '/purchasing/acquireProduct':
-      return '产品收购'
+      return '代购点产品收购'
+    case '/purchasing/accessInventory':
+      return '代购点物资入库'
+    case '/purchasing/accessOutInventory':
+      return '代购点物资出库'
     default:
       return '基础数据录入';
   }

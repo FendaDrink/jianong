@@ -11,14 +11,14 @@
           <a-input v-model:value="modelRef.address" />
         </a-form-item >
       </a-col>
-        <a-col>
+      <a-col :span="12" style="float:left;margin-left: 70px">
         <a-form-item label="电话" v-bind="validateInfos.tel">
           <a-input v-model:value="modelRef.tel" />
         </a-form-item>
         <a-form-item label="播种面积" v-bind="validateInfos.area">
           <a-input v-model:value="modelRef.area" />
         </a-form-item>
-         </a-col>
+       </a-col>
       <template style="clear: both"></template>
       <a-col style="float: left;width: 240px;margin: 30px 250px 0 250px">
         <a-form-item >
@@ -103,7 +103,7 @@ const rulesRef = reactive({
         const phoneRegex = /^(\+?\d{1,4}[- ]?)?\d{7,15}$/;
         if (!phoneRegex.test(value)) {
           return Promise.reject(
-            "请输入有效的电话号码，例如 12345678901 或 +8612345678901"
+            "请输入有效的电话号码"
           );
         }
         return Promise.resolve();

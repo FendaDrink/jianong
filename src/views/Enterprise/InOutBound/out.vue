@@ -1,7 +1,7 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">物资入库</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">物资出库</h1>
   <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
@@ -33,17 +33,15 @@
   <Drawer/>
 </template>
 <script lang="ts" setup>
-import { computed, createVNode, type UnwrapRef } from "vue";
+import { computed } from "vue";
 import { onMounted, reactive, ref, watch } from "vue";
 import Dialogue from "@/components/AddForm/Dialogue.vue";
 import { message } from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import { useDrawerStore } from "@/stores/drawer";
-import { getInInventory } from '@/request/enterprise'
+import { getOutInventory } from "@/request/enterprise";
 import { useAddFormStore } from "@/stores/addForm";
-import { cloneDeep } from "lodash-es";
 import moment from "moment";
-import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import type { Dayjs } from "dayjs";
 
 const confirmLoading = ref<boolean>(false);
@@ -95,10 +93,11 @@ interface DataItem {
   wznumber: string;
   number: string;
   mch: string;
-  inprice: number | null;
+  ourprice: number | null;
   total: number | null;
   sum: number | null;
-  jigou: string;
+  nhname: string;
+  nhnumber: string;
   time: string;
 }
 
@@ -123,10 +122,11 @@ const onSearch = () => {
             (item.number.includes(searchContent.value) ||
               item.wznumber.toLowerCase().includes(keywords) ||
               item.mch.toLowerCase().includes(keywords) ||
-              item.inprice?.toString().toLowerCase().includes(keywords) ||
+              item.ourprice?.toString().toLowerCase().includes(keywords) ||
               item.total?.toString().toLowerCase().includes(keywords) ||
               item.sum?.toString().toLowerCase().includes(keywords) ||
-              item.jigou.toLowerCase().includes(keywords)
+              item.nhname.toLowerCase().includes(keywords) ||
+              item.nhnumber.toLowerCase().includes(keywords)
             ))
     )
   });
@@ -149,7 +149,7 @@ const onReset = async () => {
 // 获取出库数据
 const getData = async () => {
   loading.value = true;
-  let res = await getInInventory();
+  let res = await getOutInventory();
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);
   columns.value[0].fixed = "left";

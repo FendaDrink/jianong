@@ -27,7 +27,6 @@
     :columns="columns"
     :data-source="dataSource"
     :loading="loading"
-    :scroll="{ x: 1500 }"
     style="margin-top: 5px"
     :locale="localeOption"
   >
@@ -93,25 +92,6 @@ interface titleItem {
   sorter?: Function;
 }
 
-const inputType = new Map([
-  ["orderId", "text"],
-  ["year", "number"],
-  ["inTime", "date"],
-  ["type", "text"],
-  ["airCode", "text"],
-  ["colorCode", "number"],
-  ["batchNum", "text"],
-  ["carNum", "number"],
-  ["varietyCode", "text"],
-  ["carCode", "text"],
-  ["stall", "number"],
-  ["engineCode", "text"],
-  ["customer", "text"],
-  ["orderBatchNum", "text"],
-  ["requirements", "text"],
-  ["remark", "text"],
-]);
-
 const localeOption = {
   emptyText: "暂无数据",
   cancelText: "取消",
@@ -150,10 +130,9 @@ const dataSource = ref<DataItem[]>([]);
 
 const dataSourceCopy = ref<DataItem[]>([]);
 
-const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 
 const onSearch = () => {
-  if (!searchContent.value && !selectedYear.value) {
+  if (!searchContent.value) {
     return message.warn("搜索不能为空");
   }
   loading.value = true;
@@ -161,7 +140,7 @@ const onSearch = () => {
   dataSource.value = dataSourceCopy.value.filter((item) => {
     return (
       searchContent.value &&
-      (item.key.includes(searchContent.value) ||
+      (
         item.chpnumber.toLowerCase().includes(keywords) ||
         item.remain.toLowerCase().includes(keywords))
     );
@@ -189,17 +168,10 @@ const getData = async () => {
   let res = await getProductstock();
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);
+  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   columns.value[0].fixed = "left";
 
-  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value.map(
-    (item) => {
-      return {
-        ...item,
-        inTime: moment(item.inTime).format("YYYY-MM-DD"),
-        time: moment(item.time).format("YYYY-MM-DD HH:mm:ss"),
-      };
-    }
-  );
+  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value;
   loading.value = false;
 };
 

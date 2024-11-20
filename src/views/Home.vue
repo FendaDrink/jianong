@@ -16,8 +16,11 @@
           <a-menu-item key="/enterprise/sale">
             产品销售
           </a-menu-item>
-          <a-menu-item key="/enterprise/inOutBound">
-            物资出/入库
+          <a-menu-item key="/enterprise/inBound">
+            物资入库
+          </a-menu-item>
+           <a-menu-item key="/enterprise/outBound">
+            物资出库
           </a-menu-item>
           <a-menu-item key="/enterprise/inventory">
             公司物资盘点
@@ -95,7 +98,10 @@
             代购点产品盘点
           </a-menu-item>
            <a-menu-item key="/purchasing/accessInventory">
-            代购点物资出/入库
+            代购点物资入库
+          </a-menu-item>
+          <a-menu-item key="/purchasing/accessOutInventory">
+            代购点物资出库
           </a-menu-item>
            <a-menu-item key="/purchasing/checkInventory">
             代购点物资库存查询

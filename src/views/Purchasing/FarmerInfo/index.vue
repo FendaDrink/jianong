@@ -15,21 +15,20 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 1000 }"
       style="margin-top:5px"
       :locale="localeOption"
-      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange}"
+      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange, columnWidth: 5}"
   >
     <template #bodyCell="{ column, text, record }">
       <div>
         <template v-if="dataIndexArr.includes(column.dataIndex)">
           <a-input
               :label="column.dataIndex"
-              v-if="editableData[record.orderId] && column.dataIndex !== 'user' && column.dataIndex !== 'time'"
+              v-if="editableData[record.key]"
               :type="inputType.get(column.dataIndex)"
-              v-model:value="editableData[record.orderId][column.dataIndex]"
+              v-model:value="editableData[record.key][column.dataIndex]"
               style="margin: -5px 0;"
-              :disabled="column.dataIndex === 'orderId'"
           />
           <div v-else style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
             {{ text?text:'/' }}
@@ -37,16 +36,16 @@
         </template>
         <template v-else-if="column.dataIndex === 'operation'">
           <div class="editable-row-operations">
-          <span v-if="editableData[record.orderId]">
-            <a-popconfirm title="确认修改?" @confirm="update(record.orderId)" cancel-text="取消" ok-text="保存">
+          <span v-if="editableData[record.key]">
+            <a-popconfirm title="确认修改?" @confirm="update(record.key)" cancel-text="取消" ok-text="保存">
               <a>保存</a>
             </a-popconfirm>
-            <a-typography-link @click="cancel(record.orderId)">取消</a-typography-link>
+            <a-typography-link @click="cancel(record.key)">取消</a-typography-link>
           </span>
             <span v-else>
-            <a @click.capture="check(record.orderId)">查看</a>
-            <a @click="edit(record.orderId)">编辑</a>
-            <a-popconfirm title="确认删除?" @confirm="deleteItem(record.orderId)" cancel-text="取消" ok-text="确认">
+            <a @click.capture="check(record.key)">查看</a>
+            <a @click="edit(record.key)">编辑</a>
+            <a-popconfirm title="确认删除?" @confirm="deleteItem(record.key)" cancel-text="取消" ok-text="确认">
               <a>删除</a>
             </a-popconfirm>
           </span>
@@ -92,22 +91,12 @@ interface titleItem{
 }
 
 const inputType = new Map([
-  ['orderId','text'],
-  ['year','number'],
-  ['inTime','date'],
-  ['type','text'],
-  ['airCode','text'],
-  ['colorCode','number'],
-  ['batchNum','text'],
-  ['carNum','number'],
-  ['varietyCode','text'],
-  ['carCode','text'],
-  ['stall','number'],
-  ['engineCode','text'],
-  ['customer','text'],
-  ['orderBatchNum','text'],
-  ['requirements','text'],
-  ['remark','text'],
+  ['key','text'],
+  ['number','text'],
+  ['nhname','text'],
+  ['address','text'],
+  ['tel','number'],
+  ['area','text'],
 ]);
 
 const localeOption = {
@@ -132,8 +121,6 @@ const dataIndexArr = ref<string[]>([]);
 
 const columns = ref<titleItem[]>([]);
 
- 
-
 type OrderId = string;
 
 interface DataItem {
@@ -143,7 +130,6 @@ interface DataItem {
   address:string;
   tel:number|null;
   area:string;
- 
 }
 
 const drawerStore = useDrawerStore();
@@ -159,16 +145,16 @@ const check =  async (orderId:string) => {
   drawerStore.orderId = orderId;
 }
 
-const edit = (orderId: string) => {
-  editableData[orderId] = cloneDeep(dataSource.value.filter(item => orderId === item.orderId)[0]);
+const edit = (key: string) => {
+  editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
 };
 
 const cancel = (key: string) => {
   delete editableData[key];
 };
 // 删除农户信息
-const deleteItem = async (orderId:string) => {
-  let res = await deleteFarmerInfo(orderId);
+const deleteItem = async (key:string) => {
+  let res = await deleteFarmerInfo(key);
   if(res.data.code === 200){
     message.success('删除成功');
     await getFarmerInfoDetail();
@@ -176,10 +162,9 @@ const deleteItem = async (orderId:string) => {
     message.error('删除失败');
   }
 }
-// 删不掉哈
 
 const onSearch = () => {
-  if(!searchContent.value && !selectedYear.value){
+  if(!searchContent.value){
     return message.warn('搜索不能为空');
   }
   loading.value = true;
@@ -219,16 +204,16 @@ const onReset = async () => {
 const getFarmerInfoDetail = async () => {
   loading.value = true;
   let res = await getFarmerInfo();
-console.log(res,'klkl');
 
-columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id');
+  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
 
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value[0].fixed = 'left';
+  columns.value[0].width = 20
   columns.value.push({
     title: '操作',
     dataIndex: 'operation',
-    width:150,
+    width:45,
     fixed:'right'
   })
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value.map(item=>{
@@ -257,23 +242,19 @@ const onSelectChange = (selectedRowKeys: OrderId[]) => {
   state.selectedRowKeys = selectedRowKeys;
 };
 // 农户信息修改
-const update= async (orderId:string) => {
-  if(editableData[orderId]['year']>2100 || editableData[orderId]['year']<1900) return message.warn('请输入正确的年份');
+const update= async (key:string) => {
   try{
-    let res = await updateFarmerInfo(editableData[orderId]);
-    
-    
+    let res = await updateFarmerInfo(editableData[key]);
+
     if(res.data.code === 200){
       message.success('修改成功');
       await getFarmerInfoDetail();
-      delete editableData[orderId];
+      delete editableData[key];
     }
   }catch (err:any){
     message.error(err.response.data.msg);
     return;
   }
-  // Object.assign(dataSource.value.filter(item => orderId === item.orderId)[0], editableData[orderId]);
-  // delete editableData[orderId];
 }
 
 const combinedWatch = computed(() => ({
