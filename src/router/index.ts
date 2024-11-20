@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect:'/enterprise/productInfo',
+      redirect:'/basic/productInfo',
     },
     {
       path:'/',
@@ -21,15 +21,37 @@ const router = createRouter({
         },
         //   嘉农相关路由在下面
         {
+          // 基本信息
+          path:'/basic',
+          name:'basic',
+          children:[
+              {
+                path:'productInfo',
+                name:'BasicProductInfo',
+                component:()=>import('@/views/Basic/ProductInfo/index.vue')
+              },
+            {
+              path:'inventoryInfo',
+              name:'BasicInventoryInfo',
+              component:()=>import('@/views/Basic/InventoryInfo/index.vue')
+            },
+            {
+              path:'institute',
+              name:'BasicInstitute',
+              component:()=>import('@/views/Basic/Institution/index.vue')
+            },
+          ]
+        },
+        {
           // 公司系统
           path:'/enterprise',
           name:'enterprise',
           children:[
             {
-              path:'productInfo',
-              name:'EnterpriseProductInfo',
-              component:()=>import('@/views/Enterprise/ProductInfo/index.vue')
-            },
+                path:'productInfo',
+                name:'EnterpriseProductInfo',
+                component:()=>import('@/views/Enterprise/ProductInfo/index.vue')
+              },
             {
               path:'inventoryInfo',
               name:'EnterpriseInventoryInfo',

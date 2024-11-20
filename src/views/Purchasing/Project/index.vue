@@ -78,7 +78,7 @@ interface DataItem {
   key:string;
   id: string;
   nhname: string;
-  pzname: string;
+  pzhname: string;
   area: number | null;
   date: string;
 }
@@ -97,10 +97,10 @@ const onSearch = () => {
   const keywords = searchContent.value.trim().toLowerCase()
   dataSource.value =  dataSourceCopy.value.filter(item => {
    return (
-    item.nhname.toLowerCase().includes(keywords) ||
-    item.pzname.toLowerCase().includes(keywords) ||
+    item.nhname?.toLowerCase().includes(keywords) ||
+    item.pzhname?.toLowerCase().includes(keywords) ||
     item.area?.toString().toLowerCase().includes(keywords) ||
-    item.date.toLowerCase().includes(keywords)
+    item.date?.toLowerCase().includes(keywords)
   )
   });
   if(dataSource.value.length>0){

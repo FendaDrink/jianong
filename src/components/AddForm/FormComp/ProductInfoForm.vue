@@ -75,31 +75,6 @@ const formState = reactive<FormState>({
   package: ''
 });
 
-// 对档位字段的检查
-const checkStall = async (_rule: Rule, value: string) => {
-  if (!value) {
-    return Promise.reject('请输入档位');
-  }
-  if (!Number.isInteger(Number(value)) || Number(value) <= 0) {
-    return Promise.reject('档位必须为正整数');
-  }
-    return Promise.resolve();
-};
-// 对特殊发动机代码字段的检查
-const validateCode = async (_rule: Rule, value: string) => {
-  if (value === '') {
-    return Promise.reject('请输入特殊发动机代码');
-  }
-    return Promise.resolve();
-};
-// 对特殊发动机名称字段的检查
-const validateName = async (_rule: Rule, value: string) => {
-  if (value === '') {
-    return Promise.reject('请输入特殊发动机名称');
-  }
-    return Promise.resolve();
-};
-
 const rules: Record<string, Rule[]> = {
   // code: [{ validator: validateCode, trigger: 'blur' }],
   // stall: [{ validator: checkStall, trigger: 'blur' }],

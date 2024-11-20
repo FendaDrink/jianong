@@ -93,7 +93,7 @@ export const deleteOrderCarBatch = (params:UnwrapNestedRefs<any>):Promise<Delete
 // 代购点
 // 农户增删改查
 export const addFarmerInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/farmer',params);
-export const deleteFarmerInfo = (key:string[]):Promise<any> => request.delete('/purchasing/farmer'+key);
+export const deleteFarmerInfo = (key:string):Promise<any> => request.delete('/purchasing/farmer/'+key);
 export const updateFarmerInfo = (params:UnwrapNestedRefs<any>):Promise<UpdateOrderAPIRes> => request.patch('/purchasing/farmer',params);
 export const getFarmerInfo = ():Promise<any> => request.get('/purchasing/farmer');
 // 产品管理

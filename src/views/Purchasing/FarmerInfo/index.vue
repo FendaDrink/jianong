@@ -91,7 +91,6 @@ interface titleItem{
 }
 
 const inputType = new Map([
-  ['key','text'],
   ['number','text'],
   ['nhname','text'],
   ['address','text'],
@@ -172,13 +171,12 @@ const onSearch = () => {
   dataSource.value =  dataSourceCopy.value.filter(item => {
     return (
             (searchContent.value &&
-            (item.key.includes(searchContent.value) ||
-              item.number.toLowerCase().includes(keywords) ||
-              item.nhname.toLowerCase().includes(keywords) ||
+            (
+              item.number?.toLowerCase().includes(keywords) ||
+              item.nhname?.toLowerCase().includes(keywords) ||
               item.address?.toString().toLowerCase().includes(keywords) ||
               item.tel?.toString().toLowerCase().includes(keywords) ||
-              item.area?.toString().toLowerCase().includes(keywords) 
-               
+              item.area?.toString().toLowerCase().includes(keywords)
             ))
     )
   });

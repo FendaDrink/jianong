@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive} from 'vue';
+import {reactive} from 'vue';
 import { useRouter } from "vue-router";
 import {login} from "@/request/api";
 import {message} from "ant-design-vue";
@@ -72,6 +72,13 @@ const handleClick = async () => {
       if(res.data.code === 200){
         setToken(<string>res.data.data!.token,<string>res.data.data!.username);
         userInfoStore.isTokenExpired = false;
+        userInfoStore.userInfo = {
+          username: <string>res.data.data!.username,
+          type: <string>res.data.data!.type,
+          authorization: <number>res.data.data!.authorization,
+          code: <string>res.data.data!.code
+        }
+        console.log(userInfoStore.userInfo, 'test')
         await router.push('/');
         message.success('登录成功');
       }

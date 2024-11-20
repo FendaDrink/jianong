@@ -163,10 +163,10 @@ const onSearch = () => {
   const keywords = searchContent.value.trim().toLowerCase()
   dataSource.value =  dataSourceCopy.value.filter(item => {
    return (
-    item.number.toLowerCase().includes(keywords) ||
-    item.jgname.toLowerCase().includes(keywords) ||
-    item.type.toLowerCase().includes(keywords) ||
-    item.address.toLowerCase().includes(keywords)
+    item.nhname?.toLowerCase().includes(keywords) ||
+    item.pzname?.toLowerCase().includes(keywords) ||
+    item.area?.toString().toLowerCase().includes(keywords) ||
+    item.date?.toLowerCase().includes(keywords)
   )
   });
   if(dataSource.value.length>0){

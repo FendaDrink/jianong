@@ -139,7 +139,6 @@ const onReset = async () => {
 const getData = async () => {
   loading.value = true;
   let res = await getProductStock();
-  console.log(res , 'ppp');
   
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);

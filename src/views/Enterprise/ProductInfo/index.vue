@@ -68,6 +68,7 @@ import {deleteOrderCarBatch} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
 import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
+import Backup from "@/components/AddForm/Backup.vue";
 
 const confirmLoading = ref<boolean>(false);
 
@@ -88,12 +89,9 @@ interface titleItem{
 }
 
 const inputType = new Map([
-  ['chpnumber', 'text'],
-  ['mch', 'text'],
-  ['class', 'text'],
   ['address', 'text'],
   ['jdnumber', 'text'],
-  ['pznumber', 'text'],
+  ['pzhnumber', 'text'],
   ['price', 'number'],
   ['package', 'text']
 ]);
