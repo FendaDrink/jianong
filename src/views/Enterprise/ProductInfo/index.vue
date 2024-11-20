@@ -14,10 +14,10 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 1200 }"
       style="margin-top:5px"
       :locale="localeOption"
-      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange}"
+      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange, columnWidth: 5}"
   >
     <template #bodyCell="{ column, text, record }">
       <div>

@@ -114,7 +114,7 @@ body{
           box-shadow:10px 10px 5px rgba(0,0,0,.3);
           background-color: rgba(238, 238, 238, 0.6);
           width: 400px;
-          height: 280px;
+          height: 260px;
           .title{
             font-size: 28px;
             vertical-align: center;

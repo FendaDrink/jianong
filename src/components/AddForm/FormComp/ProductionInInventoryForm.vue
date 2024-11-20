@@ -11,15 +11,15 @@
       <a-form-item label="物资名称" v-bind="validateInfos.mch">
         <a-input v-model:value="modelRef.mch" />
       </a-form-item>
-      <a-form-item label="出价" v-bind="validateInfos.outprice">
-        <a-input type="number" v-model:value="modelRef.outprice" />
+      <a-form-item label="进价" v-bind="validateInfos.inprice">
+        <a-input type="number" v-model:value="modelRef.inprice" />
       </a-form-item>
     </a-col>
     <a-col :span="12" style="float:left;margin-left: 70px">
        <a-form-item label="总数" v-bind="validateInfos.total">
         <a-input type="number" v-model:value="modelRef.total" />
       </a-form-item>
-      <a-form-item label="出库时间" v-bind="validateInfos.time">
+      <a-form-item label="入库时间" v-bind="validateInfos.time">
         <a-date-picker v-model:value="modelRef.time" show-time/>
       </a-form-item>
       <a-form-item label="机构编号" v-bind="validateInfos.jigou">
@@ -38,7 +38,7 @@
     <script lang="ts" setup>
 import { reactive, toRaw, watch } from "vue";
 import { Form, message } from "ant-design-vue";
-import { addOutInventory } from "@/request/enterprise";
+import { addInInventory } from "@/request/production";
 import { useAddFormStore } from "@/stores/addForm";
 
 const addFormStore = useAddFormStore();
@@ -51,7 +51,7 @@ const wrapperCol = { span: 16 };
 interface ModelRef {
   wznumber: string;
   mch: string;
-  outprice: number | null;
+  inprice: number | null;
   total: number | null;
   time: number | null;
   jigou: string;
@@ -60,10 +60,10 @@ interface ModelRef {
 const modelRef = reactive<ModelRef>({
   wznumber: "",
   mch: "",
-  outprice: null,
+  inprice: null,
   total: null,
-  time: null,
   jigou: "",
+  time: null,
 });
 
 const rulesRef = reactive({
@@ -87,11 +87,11 @@ const rulesRef = reactive({
       },
     },
   ],
-  outprice: [
+  inprice: [
     {
       validator: (rule: any, value: string) => {
         if (value === null) {
-          return Promise.reject("请输入出价");
+          return Promise.reject("请输入进价");
         }
         return Promise.resolve();
       },
@@ -121,7 +121,7 @@ const rulesRef = reactive({
     {
       validator: (rule: any, value: number) => {
         if (value === null) {
-          return Promise.reject("请选择出库时间");
+          return Promise.reject("请选择入库时间");
         }
         return Promise.resolve();
       },
@@ -136,14 +136,14 @@ const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef, {
 const onSubmit = () => {
   validate()
     .then(async () => {
-      let res = await addOutInventory({...toRaw(modelRef),time: modelRef.time.valueOf()});
+      let res = await addInInventory({...toRaw(modelRef),time: modelRef.time.valueOf()});
       if (res.data.code === 200) {
         addFormStore.open = false;
         message.success("新增成功");
       }
     })
     .catch((err) => {
-      message.error(err.response.data.msg);
+      message.error(err);
     });
 };
 watch(

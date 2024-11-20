@@ -20,6 +20,7 @@
       style="margin-top:5px"
       :locale="localeOption"
       :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange}"
+      :pagination={pageSize:7}
   >
     <template #bodyCell="{ column, text, record }">
       <div>

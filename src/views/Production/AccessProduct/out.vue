@@ -1,17 +1,19 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">生产基地物资库存查询</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">生产基地产品出库</h1>
+ <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
     <a-button type="primary" @click="onSearch" style="margin-left: 10px">搜索</a-button>
     <a-button type="default" style="margin-left: 10px" @click="onReset">重置</a-button>
   </span>
   <a-table
-      row-key="key"
+      row-key="orderId"
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
+      :scroll="{  x: 1800 }"
       style="margin-top:5px"
       :locale="localeOption"
       :pagination={pageSize:7}
@@ -19,8 +21,11 @@
     <template #bodyCell="{ column, text, record }">
       <div>
         <template v-if="dataIndexArr.includes(column.dataIndex)">
-          <div style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
+          <div v-if="column.dataIndex !== 'time'" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
             {{ text?text:'/' }}
+          </div>
+          <div v-else style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
+            {{ text?moment(text).format('YYYY-MM-DD HH:mm:ss'):'/'}}
           </div>
         </template>
       </div>
@@ -34,10 +39,11 @@ import {onMounted, reactive, ref, watch} from 'vue';
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {getPurInventory} from "@/request/production";
+import {getProducOutstock} from '@/request/production'
+import {checkOutStock } from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
+import moment from 'moment'
 import type { Dayjs } from 'dayjs';
-
 const searchContent = ref<string>('');
 
 const addFormStore = useAddFormStore();
@@ -54,6 +60,26 @@ interface titleItem{
   onFilter?:Function;
   sorter?:Function;
 }
+
+
+const inputType = new Map([
+  ['orderId','text'],
+  ['year','number'],
+  ['inTime','date'],
+  ['type','text'],
+  ['airCode','text'],
+  ['colorCode','number'],
+  ['batchNum','text'],
+  ['carNum','number'],
+  ['varietyCode','text'],
+  ['carCode','text'],
+  ['stall','number'],
+  ['engineCode','text'],
+  ['customer','text'],
+  ['orderBatchNum','text'],
+  ['requirements','text'],
+  ['remark','text'],
+]);
 
 const localeOption = {
   emptyText: '暂无数据',
@@ -81,8 +107,17 @@ type OrderId = string;
 
 interface DataItem {
   key: string;
-  wznumber: string;
-  remain: number | null;
+  id: string;
+  chpnumber: string;
+  number: string;
+  mch: string;
+  price: number;
+  total: number;
+  money: number;
+  person: string;
+  time: string;
+  pianming: string;
+  shouhuo:string;
 }
 
 const drawerStore = useDrawerStore();
@@ -91,6 +126,7 @@ const dataSource = ref<DataItem[]>([]);
 
 const dataSourceCopy = ref<DataItem[]>([]);
 
+const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 
 const onSearch = () => {
   if(!searchContent.value && !selectedYear.value){
@@ -101,11 +137,21 @@ const onSearch = () => {
   dataSource.value =  dataSourceCopy.value.filter(item => {
     return (
             (searchContent.value &&
-            (item.wznumber.toLowerCase().includes(keywords) ||
-            item.remain!.toString().toLowerCase().includes(keywords))
-            )
+            (item.key?.includes(searchContent.value) ||
+              item.pianming?.toLowerCase().includes(keywords) ||
+              item.shouhuo?.toLowerCase().includes(keywords) ||
+              item.chpnumber?.toString().toLowerCase().includes(keywords) ||
+              item.number?.toString().toLowerCase().includes(keywords) ||
+              item.mch?.toString().toLowerCase().includes(keywords) ||
+              item.price.toString().includes(keywords) ||
+              item.total?.toString().includes(keywords) ||
+              item.money?.toString().includes(keywords) ||
+              item.person?.toLowerCase().includes(keywords) ||
+              item.time?.toLowerCase().includes(keywords)
+            ))
     )
   });
+
   if(dataSource.value.length>0){
     message.success('搜索成功')
   }else{
@@ -123,30 +169,56 @@ const onReset = async () => {
   message.success('重置成功');
 }
 
+// 获取出库数据
 const getData = async () => {
   loading.value = true;
-  let res = await getPurInventory();
+  let res = await getProducOutstock();
+
   columns.value = [...res.data.data.title];
-  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
-  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
-  dataIndexArr.value = columns.value.map((item) => item.dataIndex);
+  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
+  columns.value[0].fixed = 'left';
+
+  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value.map(item=>{
+    return {
+      ...item,
+      inTime:moment(item.inTime).format('YYYY-MM-DD'),
+      time: moment(item.time).format('YYYY-MM-DD HH:mm:ss')
+    }
+  });
   loading.value = false;
 }
 
-// 批量操作
-const state = reactive<{
-  selectedRowKeys: OrderId[];
-  loading: boolean;
-}>({
-  selectedRowKeys: [],
-  loading: false,
-});
+
+
+
+
+
+const update= async (orderId:string) => {
+  if(editableData[orderId]['year']>2100 || editableData[orderId]['year']<1900) return message.warn('请输入正确的年份');
+  try{
+    let res = await updateOrderCar(editableData[orderId]);
+    if(res.data.code === 200){
+      message.success('修改成功');
+      await getData();
+      delete editableData[orderId];
+    }
+  }catch (err:any){
+    message.error(err.response.data.msg);
+    return;
+  }
+  // Object.assign(dataSource.value.filter(item => orderId === item.orderId)[0], editableData[orderId]);
+  // delete editableData[orderId];
+}
 
 const combinedWatch = computed(() => ({
   open: addFormStore.open,
   openInsert: addFormStore.openInsert,
 }));
+
+
+
+
 
 watch(combinedWatch, async (newValue, oldValue) => {
   if ((oldValue.open && !newValue.open) || (oldValue.openInsert && !newValue.openInsert)) {

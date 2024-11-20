@@ -48,6 +48,16 @@ const title = computed(() => {
       return '物资入库'
     case '/enterprise/outBound':
       return '物资入库'
+    case '/enterprise/planning':
+      return '生产计划录入'
+    case '/production/accessInProduct':
+      return '生产基地产品入库';
+    case '/production/accessOutProduct':
+      return '生产基地产品出库';
+    case '/production/accessInInventory':
+      return '生产基地物资入库'
+    case '/production/accessOutInventory':
+      return '生产基地物资出库'
     case '/purchasing/accessProduct':
       return '代购点产品出库';
     case '/purchasing/acquireProduct':

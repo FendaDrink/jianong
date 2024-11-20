@@ -38,7 +38,7 @@
     <script lang="ts" setup>
 import { reactive, toRaw, watch } from "vue";
 import { Form, message } from "ant-design-vue";
-import { addOutInventory } from "@/request/enterprise";
+import { addOutInventory } from "@/request/production";
 import { useAddFormStore } from "@/stores/addForm";
 
 const addFormStore = useAddFormStore();

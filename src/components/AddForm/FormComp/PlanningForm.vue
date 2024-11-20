@@ -5,29 +5,23 @@
     style="overflow: hidden"
   >
     <a-col :span="12" style="float: left">
-      <a-form-item label="物资编号" v-bind="validateInfos.wznumber">
-        <a-input v-model:value="modelRef.wznumber" />
+      <a-form-item label="农户名称" v-bind="validateInfos.nhname">
+        <a-input v-model:value="modelRef.nhname" />
       </a-form-item>
-      <a-form-item label="物资名称" v-bind="validateInfos.mch">
-        <a-input v-model:value="modelRef.mch" />
-      </a-form-item>
-      <a-form-item label="出价" v-bind="validateInfos.outprice">
-        <a-input type="number" v-model:value="modelRef.outprice" />
+      <a-form-item label="产品名称" v-bind="validateInfos.pzhname">
+        <a-input v-model:value="modelRef.pzhname" />
       </a-form-item>
     </a-col>
     <a-col :span="12" style="float:left;margin-left: 70px">
-       <a-form-item label="总数" v-bind="validateInfos.total">
-        <a-input type="number" v-model:value="modelRef.total" />
+      <a-form-item label="播种面积" v-bind="validateInfos.area">
+        <a-input type="number" v-model:value="modelRef.area" />
       </a-form-item>
-      <a-form-item label="出库时间" v-bind="validateInfos.time">
-        <a-date-picker v-model:value="modelRef.time" show-time/>
-      </a-form-item>
-      <a-form-item label="机构编号" v-bind="validateInfos.jigou">
-        <a-input v-model:value="modelRef.jigou" />
+      <a-form-item label="播种日期" v-bind="validateInfos.date">
+        <a-input type="number" v-model:value="modelRef.date" />
       </a-form-item>
     </a-col>
     <template style="clear: both"></template>
-    <a-col style="float: left; width: 240px; margin: 0px 250px 0 250px">
+    <a-col style="float: left; width: 240px; margin: 30px 250px 0 250px">
       <a-form-item>
         <a-button type="primary" @click.prevent="onSubmit">新增</a-button>
         <a-button style="margin-left: 20px" @click="resetFields">重置</a-button>
@@ -38,8 +32,9 @@
     <script lang="ts" setup>
 import { reactive, toRaw, watch } from "vue";
 import { Form, message } from "ant-design-vue";
-import { addOutInventory } from "@/request/enterprise";
+import { purchasingInstock } from "@/request/api";
 import { useAddFormStore } from "@/stores/addForm";
+import {addProductionPlan} from "@/request/enterprise";
 
 const addFormStore = useAddFormStore();
 
@@ -49,84 +44,65 @@ const labelCol = { span: 8 };
 const wrapperCol = { span: 16 };
 
 interface ModelRef {
-  wznumber: string;
-  mch: string;
-  outprice: number | null;
-  total: number | null;
-  time: number | null;
-  jigou: string;
+  nhname: string;
+  pzhname: string;
+  area: number | null;
+  date: string;
 }
 
 const modelRef = reactive<ModelRef>({
-  wznumber: "",
-  mch: "",
-  outprice: null,
-  total: null,
-  time: null,
-  jigou: "",
+  nhname: "",
+  pzhname: "",
+  area: null,
+  date: ""
 });
 
+const isInteger = (str: string) => {
+  const num = parseInt(str, 10);
+  return !Number.isNaN(num) && String(num) === str;
+};
+
 const rulesRef = reactive({
-  wznumber: [
+  nhname: [
     {
       validator: (rule: any, value: string) => {
         if (value === "") {
-          return Promise.reject("请输入物资编号");
+          return Promise.reject("请输入农户名称");
         }
         return Promise.resolve();
       },
     },
   ],
-  mch: [
+  pzhname: [
     {
       validator: (rule: any, value: string) => {
         if (value === "") {
-          return Promise.reject("请输入物资名称");
+          return Promise.reject("请输入产品名称");
         }
         return Promise.resolve();
       },
     },
   ],
-  outprice: [
+  area: [
+    {
+      validator: (rule: any, value: number | null) => {
+        if (value === null) {
+          return Promise.reject("请输入播种面积");
+        }
+        return Promise.resolve();
+      },
+    },
+  ],
+  date: [
     {
       validator: (rule: any, value: string) => {
         if (value === null) {
-          return Promise.reject("请输入出价");
+          return Promise.reject("请输入播种日期");
         }
         return Promise.resolve();
       },
     },
   ],
-  total: [
-    {
-      validator: (rule: any, value: string) => {
-        if (value === null) {
-          return Promise.reject("请输入总数");
-        }
-        return Promise.resolve();
-      },
-    },
-  ],
-  jigou: [
-    {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
-          return Promise.reject("请输入机构编号");
-        }
-        return Promise.resolve();
-      },
-    },
-  ],
-  time: [
-    {
-      validator: (rule: any, value: number) => {
-        if (value === null) {
-          return Promise.reject("请选择出库时间");
-        }
-        return Promise.resolve();
-      },
-    },
-  ]
 });
 const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef, {
   onValidate: (...args) => {
@@ -136,14 +112,14 @@ const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef, {
 const onSubmit = () => {
   validate()
     .then(async () => {
-      let res = await addOutInventory({...toRaw(modelRef),time: modelRef.time.valueOf()});
+      let res = await addProductionPlan(toRaw(modelRef));
       if (res.data.code === 200) {
         addFormStore.open = false;
         message.success("新增成功");
       }
     })
     .catch((err) => {
-      message.error(err.response.data.msg);
+      message.error(err);
     });
 };
 watch(

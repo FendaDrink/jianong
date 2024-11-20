@@ -19,6 +19,11 @@ import InInventoryForm from "@/components/AddForm/FormComp/InInventoryForm.vue";
 import OutInventoryForm from "@/components/AddForm/FormComp/OutInventoryForm.vue";
 import EnterpriseInInventoryForm from "@/components/AddForm/FormComp/EnterpriseInInventoryForm.vue";
 import EnterpriseOutInventoryForm from "@/components/AddForm/FormComp/EnterpriseOutInventoryForm.vue";
+import PlanningForm from "@/components/AddForm/FormComp/PlanningForm.vue";
+import ProductionInStock from "@/components/AddForm/FormComp/ProductionInStock.vue";
+import ProductionOutStock from "@/components/AddForm/FormComp/ProductionOutStock.vue";
+import ProductionInInventoryForm from "@/components/AddForm/FormComp/ProductionInInventoryForm.vue";
+import ProductionOutInventoryForm from "@/components/AddForm/FormComp/ProductionOutInventoryForm.vue";
 import { purchasingOutstock } from "@/request/api";
 
 const currentComponent = () => {
@@ -43,6 +48,16 @@ const currentComponent = () => {
       return EnterpriseInInventoryForm;
     case '/enterprise/outBound':
       return EnterpriseOutInventoryForm;
+    case '/enterprise/planning':
+      return PlanningForm;
+    case '/production/accessInProduct':
+      return ProductionInStock;
+    case '/production/accessOutProduct':
+      return ProductionOutStock;
+    case '/production/accessInInventory':
+      return ProductionInInventoryForm;
+    case '/production/accessOutInventory':
+      return ProductionOutInventoryForm;
     case "/purchasing/accessInventory":
       return InInventoryForm;
     case "/purchasing/accessOutInventory":
