@@ -93,7 +93,7 @@ export const deleteOrderCarBatch = (params:UnwrapNestedRefs<any>):Promise<Delete
 // 代购点
 // 农户增删改查
 export const addFarmerInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/farmer',params);
-export const deleteFarmerInfo = (key:string):Promise<any> => request.delete('/purchasing/farmer/${key}');
+export const deleteFarmerInfo = (key:string):Promise<any> => request.delete('/purchasing/farmer/'+key);
 export const updateFarmerInfo = (params:UnwrapNestedRefs<any>):Promise<UpdateOrderAPIRes> => request.patch('/purchasing/farmer',params);
 export const getFarmerInfo = ():Promise<any> => request.get('/purchasing/farmer');
 // 产品管理
@@ -111,3 +111,16 @@ export const purchasingOutstock = (params: UnwrapNestedRefs<any>):Promise<any> =
 export const getPurInventory = ():Promise<any> => request.get('/purchasing/inventory');
 // 代购点产品盘点
 export const purchasingUpdateStock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/updateStock',params)
+// 代购点物资盘点
+export const purchasingUpdateInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/updateInventory',params)
+// 代购点物资入库记录
+export const getInInventory = ():Promise<any> => request.get('/purchasing/inInventory');
+
+// 代购点物资入库
+export const purchasingInInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/inInventory',params)
+
+// 代购点物资出库记录
+export const getOutInventory = ():Promise<any> => request.get('/purchasing/outInventory');
+
+// 代购点物资出库
+export const purchasingOutInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/outInventory',params)

@@ -2,7 +2,7 @@
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
   <h1 style="font-size: 28px;margin-bottom: 20px">产品收购表</h1>
-<!--  <Dialogue/>-->
+  <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
     <a-button type="primary" @click="onSearch" style="margin-left: 10px">搜索</a-button>
@@ -13,7 +13,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 2000 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -57,18 +57,31 @@ const loading = ref<boolean>(false);
 
 const selectedYear = ref<Dayjs>();
 interface titleItem {
-  key: string;
-  id: string;
-  chpnumber: string;
-  number: string;
-  mch: string;
-  price: number;
-  total: number;
-  money: number;
-  person: string;
-  time: string;
-  pianming: string;
-  nhnumber: string;
+  title:string;
+  dataIndex:string;
+  width:number;
+  fixed?:string;
+  filters?:Array<Object>;
+  onFilter?:Function;
+  sorter?:Function;
+}
+
+const localeOption = {
+  emptyText: '暂无数据',
+  cancelText: '取消',
+  okText: '确认',
+  filterConfirm: '确认',
+  filterReset: '重置',
+  selectAll: '全选',
+  selectInvert: '反选',
+  selectNone: '清空',
+  selectionAll: '全选',
+  sortTitle: '排序',
+  triggerAsc: '升序',
+  triggerDesc: '降序',
+  cancelSort: '取消排序',
+  cancelFilter: '取消筛选',
+  clearFilter: '清空筛选',
 }
 
 const inputType = new Map([
@@ -119,14 +132,10 @@ const dataSource = ref<DataItem[]>([]);
 
 const dataSourceCopy = ref<DataItem[]>([]);
 
-const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
-
- 
-
  
 
 const onSearch = () => {
-  if (!searchContent.value && !selectedYear.value) {
+  if (!searchContent.value) {
     return message.warn("搜索不能为空");
   }
   loading.value = true;
@@ -168,21 +177,11 @@ const onReset = async () => {
 const getData = async () => {
   loading.value = true;
   let res = await getProducInstock();
-  console.log(res, "hjhjjh");
-
-columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id');
+  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);
   columns.value[0].fixed = "left";
  
-  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value.map(
-    (item) => {
-      return {
-        ...item,
-        inTime: moment(item.inTime).format("YYYY-MM-DD"),
-        time: moment(item.time).format("YYYY-MM-DD HH:mm:ss"),
-      };
-    }
-  );
+  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;
 };
 
@@ -209,7 +208,11 @@ const combinedWatch = computed(() => ({
 }));
 
  
-
+watch(combinedWatch, async (newValue, oldValue) => {
+  if ((oldValue.open && !newValue.open) || (oldValue.openInsert && !newValue.openInsert)) {
+    await getData();
+  }
+});
  
 watch(
   () => drawerStore.open,

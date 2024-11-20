@@ -13,7 +13,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 2000 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -188,6 +188,7 @@ const getData = async () => {
   
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
+  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   columns.value[0].fixed = 'left';
  
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value.map(item=>{

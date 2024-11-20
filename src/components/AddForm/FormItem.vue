@@ -14,6 +14,11 @@ import ProductInfoForm from "@/components/AddForm/FormComp/ProductInfoForm.vue"
 import AddFarmerInfo from "@/components/AddForm/FormComp/addFarmerInfo.vue";
 import purchasOutStock from "@/components/AddForm/FormComp/purchasOutStock.vue";
 import purchasInStock from "./FormComp/purchasInStock.vue";
+import InstitutionForm from "@/components/AddForm/FormComp/InstitutionForm.vue"
+import InInventoryForm from "@/components/AddForm/FormComp/InInventoryForm.vue";
+import OutInventoryForm from "@/components/AddForm/FormComp/OutInventoryForm.vue";
+import EnterpriseInInventoryForm from "@/components/AddForm/FormComp/EnterpriseInInventoryForm.vue";
+import EnterpriseOutInventoryForm from "@/components/AddForm/FormComp/EnterpriseOutInventoryForm.vue";
 import { purchasingOutstock } from "@/request/api";
 
 const currentComponent = () => {
@@ -28,10 +33,20 @@ const currentComponent = () => {
       return AddFarmerInfo;
     case "/purchasing/accessProduct":
       return purchasOutStock;
-    case "/purchasingacquireProduct":
+    case "/purchasing/acquireProduct":
       return purchasInStock;
     case "/enterprise/productInfo":
       return ProductInfoForm;
+    case "/enterprise/institute":
+      return InstitutionForm;
+    case '/enterprise/inBound':
+      return EnterpriseInInventoryForm;
+    case '/enterprise/outBound':
+      return EnterpriseOutInventoryForm;
+    case "/purchasing/accessInventory":
+      return InInventoryForm;
+    case "/purchasing/accessOutInventory":
+      return OutInventoryForm;
     default:
       return PublicForm;
   }

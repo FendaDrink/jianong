@@ -9,7 +9,7 @@
       title="查看"
       placement="right"
   >
-    <a-card :loading="loading" title="订单车信息">
+    <a-card :loading="loading" title="信息查看">
       <a-descriptions column="3">
         <a-descriptions-item
             v-for="item in publicInfo.slice(0,14)"
