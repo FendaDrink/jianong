@@ -29,6 +29,7 @@
     :loading="loading"
     style="margin-top: 5px"
     :locale="localeOption"
+    :pagination="{ pageSize: 7}"
   >
     <template #bodyCell="{ column, text, record }">
       <div>
@@ -62,7 +63,7 @@
 <script lang="ts" setup>
 import { computed, createVNode, type UnwrapRef } from "vue";
 import { onMounted, reactive, ref, watch } from "vue";
- 
+
 import { message, Modal } from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import { useDrawerStore } from "@/stores/drawer";

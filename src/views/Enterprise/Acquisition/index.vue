@@ -13,7 +13,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 1800 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -150,6 +150,7 @@ const getData = async () => {
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value = columns.value.filter(item=>item.dataIndex!=='id')
+  columns.value[0].fixed = 'left';
 
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;

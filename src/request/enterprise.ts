@@ -74,3 +74,12 @@ export const getOutInventory = ():Promise<any> => request.get('/enterprise/outIn
 
 /* 物资出库 */
 export const addOutInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/enterprise/outInventory',params)
+
+/* 获取备份文件列表 */
+export const getBackupList = ():Promise<any> => request.get('/enterprise/getBackupFiles');
+
+/* 备份文件 */
+export const backup = ():Promise<any> => request.post('/enterprise/backup');
+
+/* 还原文件 */
+export const restore = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/enterprise/restore',params);

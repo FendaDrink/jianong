@@ -5,5 +5,16 @@ import {ref} from "vue";
 export const useUserInfoStore = defineStore('userInfo', ()=>{
    const username = ref('');
    const isTokenExpired = ref<boolean>(false)
-   return {username,isTokenExpired}
+   const userInfo = ref<any>({})
+   return {username,isTokenExpired,userInfo}
+}, {
+   persist: {
+       enabled: true,
+       strategies: [
+           {
+               key: 'userInfo',
+               storage: localStorage,
+           }
+       ]
+   }
 })

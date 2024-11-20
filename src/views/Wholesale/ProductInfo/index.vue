@@ -13,7 +13,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 1200 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -176,7 +176,6 @@ const onReset = async () => {
 const getData = async () => {
   loading.value = true;
   let res = await getproductInfo();
-  console.log(res , 'ppp');
   
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);

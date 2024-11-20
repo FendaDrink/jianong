@@ -178,7 +178,7 @@ const onSubmit = () => {
       }
     })
     .catch((err) => {
-      message.error(err);
+      message.error(err.response.data.msg);
     });
 };
 watch(

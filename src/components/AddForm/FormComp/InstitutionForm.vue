@@ -20,7 +20,14 @@
     </a-col>
     <a-col :span="12" style="float:left;margin-left: 70px">
       <a-form-item has-feedback label="机构类型" name="address">
-        <a-input v-model:value="formState.type"  />
+        <a-select
+          ref="select"
+          v-model:value="formState.type"
+        >
+          <a-select-option value="生产基地">生产基地</a-select-option>
+          <a-select-option value="批发中心">批发中心</a-select-option>
+          <a-select-option value="代购点">代购点</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item has-feedback label="机构地址" name="jdname">
         <a-input v-model:value="formState.address"  />
@@ -95,6 +102,7 @@ const layout = {
 
 const resetForm = () => {
   formRef.value!.resetFields();
+  formState.type = '';
 };
 
 const onSubmit = async () => {
@@ -105,7 +113,7 @@ const onSubmit = async () => {
       message.success('增加成功');
     }
   }catch (err:any){
-      message.error(err.response.data.data);
+      message.error(err.response.data.msg);
   }
 }
 

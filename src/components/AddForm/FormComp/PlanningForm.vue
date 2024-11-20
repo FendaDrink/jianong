@@ -14,10 +14,10 @@
     </a-col>
     <a-col :span="12" style="float:left;margin-left: 70px">
       <a-form-item label="播种面积" v-bind="validateInfos.area">
-        <a-input type="number" v-model:value="modelRef.area" />
+        <a-input v-model:value="modelRef.area" />
       </a-form-item>
       <a-form-item label="播种日期" v-bind="validateInfos.date">
-        <a-input type="number" v-model:value="modelRef.date" />
+        <a-input v-model:value="modelRef.date" />
       </a-form-item>
     </a-col>
     <template style="clear: both"></template>

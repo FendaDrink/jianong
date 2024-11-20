@@ -51,6 +51,8 @@ declare module 'vue' {
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATypographyLink: typeof import('ant-design-vue/es')['TypographyLink']
     AUpload: typeof import('ant-design-vue/es')['Upload']
+    Backup: typeof import('./src/components/AddForm/Backup.vue')['default']
+    BackupForm: typeof import('./src/components/AddForm/FormComp/backupForm.vue')['default']
     CarDrawer: typeof import('./src/components/CheckForm/CarDrawer.vue')['default']
     CarForm: typeof import('./src/components/AddForm/FormComp/CarForm.vue')['default']
     ColorForm: typeof import('./src/components/AddForm/FormComp/ColorForm.vue')['default']

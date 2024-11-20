@@ -12,7 +12,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 1800 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -41,6 +41,7 @@ import {useDrawerStore} from "@/stores/drawer";
 import {useAddFormStore} from "@/stores/addForm";
 import {getProductSale} from '@/request/enterprise'
 import moment from "moment";
+
 const searchContent = ref<string>('');
 
 const addFormStore = useAddFormStore();
@@ -146,6 +147,7 @@ const getData = async () => {
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
   columns.value = columns.value.filter(item=>item.dataIndex!=='key')
+  columns.value[0].fixed = 'left';
 
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;

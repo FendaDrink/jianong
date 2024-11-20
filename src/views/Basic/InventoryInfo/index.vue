@@ -1,7 +1,7 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">生产计划查询</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">物资信息表</h1>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
     <a-button type="primary" @click="onSearch" style="margin-left: 10px">搜索</a-button>
@@ -14,7 +14,6 @@
       :loading="loading"
       style="margin-top:5px"
       :locale="localeOption"
-      :pagination={pageSize:7}
   >
     <template #bodyCell="{ column, text, record }">
       <div>
@@ -29,13 +28,19 @@
   <Drawer/>
 </template>
 <script lang="ts" setup>
-import {computed} from 'vue';
-import {onMounted, ref, watch} from 'vue';
-import {message} from "ant-design-vue";
+import {computed, createVNode, type UnwrapRef} from 'vue';
+import {onMounted, reactive, ref, watch} from 'vue';
+import Dialogue from "@/components/AddForm/Dialogue.vue";
+import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
+import {getInventoryInfo, updateInventoryInfo, deleteInventoryInfo} from '@/request/enterprise'
+import {deleteOrderCarBatch} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
-import {getProductionPlan} from "@/request/enterprise";
+import {cloneDeep} from "lodash-es";
+import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
+
+const confirmLoading = ref<boolean>(false);
 
 const searchContent = ref<string>('');
 
@@ -52,6 +57,14 @@ interface titleItem{
   onFilter?:Function;
   sorter?:Function;
 }
+
+const inputType = new Map([
+  ['number', 'text'],
+  ['wzname', 'text'],
+  ['danwei', 'text'],
+  ['inprice', 'number'],
+  ['outprice', 'number'],
+]);
 
 const localeOption = {
   emptyText: '暂无数据',
@@ -77,11 +90,11 @@ const columns = ref<titleItem[]>([]);
 
 interface DataItem {
   key:string;
-  id: string;
-  nhname: string;
-  pzhname: string;
-  area: number | null;
-  date: string;
+  number: string;
+  wzname: string;
+  danwei: string;
+  inprice: number | null;
+  outprice: number | null;
 }
 
 const drawerStore = useDrawerStore();
@@ -89,6 +102,8 @@ const drawerStore = useDrawerStore();
 const dataSource = ref<DataItem[]>([]);
 
 const dataSourceCopy = ref<DataItem[]>([]);
+
+const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 
 const onSearch = () => {
   if(!searchContent.value){
@@ -98,10 +113,11 @@ const onSearch = () => {
   const keywords = searchContent.value.trim().toLowerCase()
   dataSource.value =  dataSourceCopy.value.filter(item => {
    return (
-    item.nhname?.toLowerCase().includes(keywords) ||
-    item.pzhname?.toLowerCase().includes(keywords) ||
-    item.area?.toString().includes(keywords) ||
-    item.date?.toLowerCase().includes(keywords)
+    item.number.toLowerCase().includes(keywords) ||
+    item.wzname.toLowerCase().includes(keywords) ||
+    item.danwei.toLowerCase().includes(keywords) ||
+    item.inprice?.toString().toLowerCase().includes(keywords) ||
+    item.outprice?.toString().toLowerCase().includes(keywords)
   )
   });
   if(dataSource.value.length>0){
@@ -123,19 +139,93 @@ const onReset = async () => {
 // 获取订单车数据
 const getData = async () => {
   loading.value = true;
-  let res = await getProductionPlan();
+  let res = await getInventoryInfo();
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
-  columns.value = columns.value.filter(item=>item.dataIndex!=='key')
-  columns.value[0].fixed = 'left';
+  columns.value = columns.value.filter(item=>item.dataIndex!=='key');
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;
+}
+
+// 批量操作
+const state = reactive<{
+  selectedRowKeys: string[];
+  loading: boolean;
+}>({
+  selectedRowKeys: [],
+  loading: false,
+});
+
+const hasSelected = computed(() => state.selectedRowKeys.length > 0);
+
+const onSelectChange = (selectedRowKeys: string[]) => {
+  console.log('selectedRowKeys changed: ', selectedRowKeys);
+  state.selectedRowKeys = selectedRowKeys;
+};
+
+const update= async (key:string) => {
+  for(let item of Object.keys(editableData[key])) {
+    if(editableData[key][item] === null || editableData[key][item] === ''){
+      return message.error(`有部分字段未填写`);
+    }
+  }
+  try{
+    let res = await updateInventoryInfo(editableData[key]);
+    if(res.data.code === 200){
+      message.success('修改成功');
+      await getData();
+      delete editableData[key];
+    }
+  }catch (err:any){
+    message.error('修改失败，请检查后再试');
+    return;
+  }
 }
 
 const combinedWatch = computed(() => ({
   open: addFormStore.open,
   openInsert: addFormStore.openInsert,
 }));
+
+// 显示删除确认框
+const showDeleteConfirm = () => {
+  Modal.confirm({
+    title: `确认要删除${state.selectedRowKeys.length}项吗？`,
+    icon: createVNode(ExclamationCircleOutlined),
+    okText: '确认',
+    okType: 'danger',
+    cancelText: '取消',
+    async onOk(){
+      try{
+        confirmLoading.value = true;
+        let res = await deleteOrderCarBatch({orderIds:state.selectedRowKeys});
+        if(res.data.code === 200){
+          confirmLoading.value = false;
+
+        }
+      }catch (err:any){
+        message.error(err.response.data.msg);
+      }
+
+    },
+    onCancel() {
+      console.log('Cancel');
+    },
+    async afterClose(){
+      message.success('删除成功');
+      state.selectedRowKeys = [];
+      try{
+        await getData();
+      }catch (err){
+        console.log(err)
+      }
+    }
+  });
+};
+
+const selectHanlder = (value:any)=>{
+  console.log(value.year());
+}
 
 watch(combinedWatch, async (newValue, oldValue) => {
   if ((oldValue.open && !newValue.open) || (oldValue.openInsert && !newValue.openInsert)) {

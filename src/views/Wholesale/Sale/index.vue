@@ -177,7 +177,6 @@ const onReset = async () => {
 const getData = async () => {
   loading.value = true;
   let res = await getProductOuttock();
-  console.log(res , 'ppp');
   
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);
@@ -199,7 +198,6 @@ const state = reactive<{
 const hasSelected = computed(() => state.selectedRowKeys.length > 0);
 
 const onSelectChange = (selectedRowKeys: OrderId[]) => {
-  console.log("selectedRowKeys changed: ", selectedRowKeys);
   state.selectedRowKeys = selectedRowKeys;
 };
  

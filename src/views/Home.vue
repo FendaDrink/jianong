@@ -5,13 +5,28 @@
         <span v-if="!collapsed" style="white-space:nowrap;display: flex;justify-content: center">嘉农管理系统</span>
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" @openChange="handleOpenChange">
-        <a-sub-menu key="/enterprise">
+        <a-sub-menu key="/basic">
+          <template #title><span><BarsOutlined /><span>基础信息</span></span></template>
+          <a-menu-item key="/basic/productInfo">
+            产品信息
+          </a-menu-item>
+          <a-menu-item key="/basic/inventoryInfo">
+            物资信息
+          </a-menu-item>
+          <a-menu-item key="/basic/institute">
+            机构信息
+          </a-menu-item>
+        </a-sub-menu>
+        <a-sub-menu v-if="userInfo.type === '5' || userInfo.type === '1'" key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
           <a-menu-item key="/enterprise/productInfo">
             产品信息管理
           </a-menu-item>
           <a-menu-item key="/enterprise/inventoryInfo">
             物资信息管理
+          </a-menu-item>
+          <a-menu-item key="/enterprise/institute">
+            机构信息管理
           </a-menu-item>
           <a-menu-item key="/enterprise/acquisition">
             产品收购
@@ -25,18 +40,15 @@
            <a-menu-item key="/enterprise/outBound">
             物资出库
           </a-menu-item>
-          <a-menu-item key="/enterprise/inventory">
+          <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/enterprise/inventory">
             公司物资盘点
-          </a-menu-item>
-          <a-menu-item key="/enterprise/institute">
-            机构信息管理
           </a-menu-item>
           <a-menu-item key="/enterprise/planning">
             生产计划制定
           </a-menu-item>
         </a-sub-menu>
 
-         <a-sub-menu key="/wholesale">
+         <a-sub-menu v-if="userInfo.type === '5' || userInfo.type === '1'|| userInfo.type === '2'" key="/wholesale">
           <template #title><span><BankOutlined /><span>批发中心系统</span></span></template>
            <a-menu-item key="/wholesale/customer">
              顾客信息
@@ -53,12 +65,12 @@
            <a-menu-item key="/wholesale/inStock">
             批发中心产品库存
           </a-menu-item>
-           <a-menu-item key="/wholesale/inventory">
+           <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/wholesale/inventory">
             批发中心产品盘点
           </a-menu-item>
         </a-sub-menu>
 
-        <a-sub-menu key="/production">
+        <a-sub-menu v-if="userInfo.type === '5' || userInfo.type === '1'|| userInfo.type === '3'" key="/production">
           <template #title><span><BgColorsOutlined /><span>生产基地系统</span></span></template>
            <a-menu-item key="/production/planning">
             生产计划查询
@@ -66,7 +78,7 @@
           <a-menu-item key="/production/inStock">
             生产基地产品库存
           </a-menu-item>
-           <a-menu-item key="/production/productInventory">
+           <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/production/productInventory">
             生产基地产品盘点
           </a-menu-item>
           <a-menu-item key="/production/accessInProduct">
@@ -84,12 +96,12 @@
            <a-menu-item key="/production/accessOutInventory">
             生产基地物资出库
           </a-menu-item>
-          <a-menu-item key="/production/takeStock">
+          <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/production/takeStock">
             生产基地物资盘点
           </a-menu-item>
         </a-sub-menu>
 
-        <a-sub-menu key="/purchasing" titleClick="handleTitleClick">
+        <a-sub-menu v-if="userInfo.type === '5' || userInfo.type === '4'" key="/purchasing" titleClick="handleTitleClick">
           <template #title><span><ShoppingCartOutlined /><span>代购点系统</span></span></template>
            <a-menu-item key="/purchasing/farmerInfo">
             农户信息
@@ -103,7 +115,7 @@
            <a-menu-item key="/purchasing/queryProduct">
             产品库存查询
           </a-menu-item>
-          <a-menu-item key="/purchasing/inventoryConsign">
+          <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/purchasing/inventoryConsign">
             代购点产品盘点
           </a-menu-item>
            <a-menu-item key="/purchasing/accessInventory">
@@ -115,7 +127,7 @@
            <a-menu-item key="/purchasing/checkInventory">
             代购点物资库存查询
           </a-menu-item>
-          <a-menu-item key="/purchasing/takeStock">
+          <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/purchasing/takeStock">
             代购点物资盘点
           </a-menu-item>
           <a-menu-item key="/purchasing/project">
@@ -136,8 +148,9 @@
             @click="() => (collapsed = !collapsed)"
         />
         <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-        <a-button type="primary" danger ghost style="float: right;margin: 16px 40px;" @click="confirm">退出系统</a-button>
-        <span style="float: right;font-size: 18px">{{ username }}，你好</span>
+        <a-button type="primary" danger ghost style="float: right;margin: 16px 40px 16px 10px" @click="confirm">退出系统</a-button>
+        <Backup v-if="userInfoStore.userInfo.type === '5' || (userInfoStore.userInfo.type === '4' && userInfoStore.userInfo.authorization === '1')"/>
+        <span style="float: right;font-size: 18px">{{ username }}</span>
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px',maxHeight: '640px' }">
         <router-view ></router-view>
@@ -146,7 +159,7 @@
   </a-layout>
 </template>
 <script lang="ts" setup>
-import {ref, createVNode, watch} from 'vue';
+import {ref, createVNode, watch, onMounted} from 'vue';
 import {
   BarsOutlined,
   ShoppingCartOutlined,
@@ -168,10 +181,13 @@ const isLoginOutOpen = ref<boolean>(false);
 const collapsed = ref<boolean>(false);
 const openKeys = ref<string[]>(['/'+currentPath.value.split('/')[1]])
 import {useUserInfoStore} from "@/stores/userInfo";
+import {useAddFormStore} from "@/stores/addForm";
 import {removeToken} from "@/request/auth";
 import {message} from "ant-design-vue";
 const userInfoStore = useUserInfoStore();
+const addFormSotre = useAddFormStore();
 const username = localStorage.getItem('planning-system-username');
+const userInfo = userInfoStore.userInfo
 const handleClick = async ({key, keyPath}: any) => {
   selectedKeys.value = [key];
   await router.push(key);
@@ -201,6 +217,11 @@ const exitLogin = async ()=> {
   });
 }
 
+watch(()=>addFormSotre.backupOpen,async (newValue,oldValue)=>{
+  if(oldValue && !newValue){
+    // window.location.reload()
+  }
+})
 </script>
 <style scoped>
 #components-layout-demo-custom-trigger .trigger {
