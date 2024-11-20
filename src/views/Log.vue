@@ -2,7 +2,7 @@
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
   <h1 style="font-size: 28px;margin-bottom: 20px">操作日志</h1>
-  <a-table :columns="columns" :data-source="dataSource" :loading="loading" :scroll="{ y:  500 }" :locale="localeOption">
+  <a-table :columns="columns" :data-source="dataSource" :loading="loading" :scroll="{ y:  450 }" :locale="localeOption">
     <template #bodyCell="{ column, text, record }">
       <template v-if="!['timestamp', 'user', 'method', 'url','requestBody','status'].includes(column.dataIndex)">
         <div style="font-size: 30px">

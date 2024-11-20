@@ -16,8 +16,8 @@
       :loading="loading"
       style="margin-top:5px"
       :locale="localeOption"
+      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange, columnWidth: 2}"
   >
-<!--    :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange}"-->
     <template #bodyCell="{ column, text, record }">
       <div>
         <template v-if="dataIndexArr.includes(column.dataIndex)">

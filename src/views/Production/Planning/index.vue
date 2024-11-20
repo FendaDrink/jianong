@@ -14,6 +14,7 @@
       :loading="loading"
       style="margin-top:5px"
       :locale="localeOption"
+      :pagination={pageSize:7}
   >
     <template #bodyCell="{ column, text, record }">
       <div>

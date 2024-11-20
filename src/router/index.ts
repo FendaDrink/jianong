@@ -31,6 +31,11 @@ const router = createRouter({
               component:()=>import('@/views/Enterprise/ProductInfo/index.vue')
             },
             {
+              path:'inventoryInfo',
+              name:'EnterpriseInventoryInfo',
+              component:()=>import('@/views/Enterprise/InventoryInfo/index.vue')
+            },
+            {
               path: 'acquisition',
               name:'acquisition',
               component:()=>import('@/views/Enterprise/Acquisition/index.vue')
@@ -88,26 +93,41 @@ const router = createRouter({
                 component:()=>import('@/views/Production/Planning/index.vue')
               },
               {
-                path:'accessProduct',
-                name:'AccessProduct',
-                component:()=>import('@/views/Production/AccessProduct/index.vue')
+                path:'accessInProduct',
+                name:'ProductionInAccessProduct',
+                component:()=>import('@/views/Production/AccessProduct/in.vue')
               },
               {
-                path:'accessInventory',
-                name:'AccessInventory',
-                component:()=>import('@/views/Production/AccessInventory/index.vue')
+                path:'accessOutProduct',
+                name:'ProductionOutAccessProduct',
+                component:()=>import('@/views/Production/AccessProduct/out.vue')
+              },
+              {
+                path:'accessInInventory',
+                name:'ProductionInAccessInventory',
+                component:()=>import('@/views/Production/AccessInventory/in.vue')
+              },
+              {
+                path:'accessOutInventory',
+                name:'ProductionOutAccessInventory',
+                component:()=>import('@/views/Production/AccessInventory/out.vue')
               },
               {
                 path:'checkInventory',
-                name:'CheckInventory',
+                name:'ProductionCheckInventory',
                 component:()=>import('@/views/Production/CheckInventory/index.vue')
               },
               {
                 path:'takeStock',
-                name:'TakeStock',
+                name:'ProductionTakeStock',
                 component:()=>import('@/views/Production/TakeStock/index.vue')
               },
-              
+              {
+                path: 'productInventory',
+                name:'ProductInventory',
+                component:()=>import('@/views/Production/ProductInventory/index.vue')
+              },
+
 
              
           ]

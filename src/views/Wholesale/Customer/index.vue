@@ -125,11 +125,9 @@ type OrderId = string;
 
 interface DataItem {
   key:OrderId; 
-  number:string;
-  gkname:string;
   address:string;
-  tel:number|null;
-  area:string;
+  gkname:string;
+  number: string;
 }
 
 const drawerStore = useDrawerStore();
@@ -172,13 +170,10 @@ const onSearch = () => {
   dataSource.value =  dataSourceCopy.value.filter(item => {
     return (
             (searchContent.value &&
-            (item.key.includes(searchContent.value) ||
+            (
               item.number.toLowerCase().includes(keywords) ||
               item.gkname.toLowerCase().includes(keywords) ||
-              item.address?.toString().toLowerCase().includes(keywords) ||
-              item.tel?.toString().toLowerCase().includes(keywords) ||
-              item.area?.toString().toLowerCase().includes(keywords) 
-               
+              item.address.toLowerCase().includes(keywords)
             ))
     )
   });

@@ -13,7 +13,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 2000 }"
+      :scroll="{  x: 1800 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -113,10 +113,16 @@ type OrderId = string;
 
 interface DataItem {
   key: string;
-  id: string;
   chpnumber: string;
-  remain:string ;
- 
+  number: string;
+  mch:string ;
+  price: number | null;
+  total: number | null;
+  money: number | null;
+  person: string;
+  time: number | null;
+  pianming: string;
+  jigou: string;
 }
 
 const drawerStore = useDrawerStore();
@@ -124,8 +130,6 @@ const drawerStore = useDrawerStore();
 const dataSource = ref<DataItem[]>([]);
 
 const dataSourceCopy = ref<DataItem[]>([]);
-
- 
 
 const onSearch = () => {
   if (!searchContent.value) {
@@ -139,7 +143,14 @@ const onSearch = () => {
             (searchContent.value &&
             ( 
               item.chpnumber.toLowerCase().includes(keywords) ||
-              item.remain.toLowerCase().includes(keywords)  
+              item.number.toLowerCase().includes(keywords)  ||
+              item.mch.toLowerCase().includes(keywords) ||
+              item.person.toLowerCase().includes(keywords) ||
+              item.pianming.toLowerCase().includes(keywords) ||
+              item.jigou.toLowerCase().includes(keywords) ||
+              item.price?.toString().toLowerCase().includes(keywords) ||
+              item.total?.toString().toLowerCase().includes(keywords) ||
+              item.money?.toString().toLowerCase().includes(keywords)
             ))
     )
   });
@@ -152,9 +163,8 @@ const onSearch = () => {
 };
 
 const onReset = async () => {
-  if (searchContent.value || selectedYear.value) {
+  if (searchContent.value) {
     searchContent.value = "";
-    selectedYear.value = undefined;
     await getData();
   }
   message.success("重置成功");
@@ -164,7 +174,6 @@ const onReset = async () => {
 const getData = async () => {
   loading.value = true;
   let res = await getProductInstock();
-  console.log(res , 'ppp');
   
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);

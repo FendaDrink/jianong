@@ -1,14 +1,17 @@
 <template>
-  <a-layout style="height: 800px;overfolow: auto;width: auto">
+  <a-layout style="height: 100vh;overfolow: auto;width: auto">
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
       <div class="logo">
-        <span v-if="!collapsed" style="white-space:nowrap;">嘉农管理系统</span>
+        <span v-if="!collapsed" style="white-space:nowrap;display: flex;justify-content: center">嘉农管理系统</span>
       </div>
       <a-menu v-model:selectedKeys="selectedKeys" :openKeys="openKeys" theme="dark" mode="inline" :inline-collapsed="collapsed" @click="handleClick" @openChange="handleOpenChange">
         <a-sub-menu key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
           <a-menu-item key="/enterprise/productInfo">
             产品信息管理
+          </a-menu-item>
+          <a-menu-item key="/enterprise/inventoryInfo">
+            物资信息管理
           </a-menu-item>
           <a-menu-item key="/enterprise/acquisition">
             产品收购
@@ -34,7 +37,7 @@
         </a-sub-menu>
 
          <a-sub-menu key="/wholesale">
-          <template #title><span><CarOutlined /><span>批发中心系统</span></span></template>
+          <template #title><span><BankOutlined /><span>批发中心系统</span></span></template>
            <a-menu-item key="/wholesale/customer">
              顾客信息
             </a-menu-item>
@@ -66,14 +69,20 @@
            <a-menu-item key="/production/productInventory">
             生产基地产品盘点
           </a-menu-item>
-          <a-menu-item key="/production/accessProduct">
-            生产基地产品出/入库
+          <a-menu-item key="/production/accessInProduct">
+            生产基地产品入库
           </a-menu-item>
-          <a-menu-item key="/production/accessInventory">
-            生产基地物资出/入库
+          <a-menu-item key="/production/accessOutProduct">
+            生产基地产品出库
           </a-menu-item>
-          <a-menu-item key="/production/checkInventory">
-            生产基地物资库存查询
+           <a-menu-item key="/production/checkInventory">
+            生产基地物资库存
+          </a-menu-item>
+          <a-menu-item key="/production/accessInInventory">
+            生产基地物资入库
+          </a-menu-item>
+           <a-menu-item key="/production/accessOutInventory">
+            生产基地物资出库
           </a-menu-item>
           <a-menu-item key="/production/takeStock">
             生产基地物资盘点
@@ -81,7 +90,7 @@
         </a-sub-menu>
 
         <a-sub-menu key="/purchasing" titleClick="handleTitleClick">
-          <template #title><span><BgColorsOutlined /><span>代购点系统</span></span></template>
+          <template #title><span><ShoppingCartOutlined /><span>代购点系统</span></span></template>
            <a-menu-item key="/purchasing/farmerInfo">
             农户信息
           </a-menu-item>
@@ -120,7 +129,7 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding-left: 20px">
+      <a-layout-header style="background: #fff; padding-left: 10px">
         <menu-unfold-outlined
             v-if="collapsed"
             class="trigger"
@@ -130,7 +139,7 @@
         <a-button type="primary" danger ghost style="float: right;margin: 16px 40px;" @click="confirm">退出系统</a-button>
         <span style="float: right;font-size: 18px">{{ username }}，你好</span>
       </a-layout-header>
-      <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
+      <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px',maxHeight: '640px' }">
         <router-view ></router-view>
       </a-layout-content>
     </a-layout>
@@ -140,7 +149,8 @@
 import {ref, createVNode, watch} from 'vue';
 import {
   BarsOutlined,
-  VideoCameraOutlined,
+  ShoppingCartOutlined,
+  BankOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   ExclamationCircleOutlined,

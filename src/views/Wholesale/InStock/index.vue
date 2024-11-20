@@ -1,7 +1,7 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">批发中心产品信息表</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">批发中心产品库存查询</h1>
  
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
@@ -13,7 +13,6 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 2000 }"
       style="margin-top:5px"
       :locale="localeOption"
   >
@@ -84,27 +83,6 @@ const localeOption = {
   clearFilter: '清空筛选',
 }
 
-const inputType = new Map([
-  ["orderId", "text"],
-  ["year", "number"],
-  ["inTime", "date"],
-  ["type", "text"],
-  ["airCode", "text"],
-  ["colorCode", "number"],
-  ["batchNum", "text"],
-  ["carNum", "number"],
-  ["varietyCode", "text"],
-  ["carCode", "text"],
-  ["stall", "number"],
-  ["engineCode", "text"],
-  ["customer", "text"],
-  ["orderBatchNum", "text"],
-  ["requirements", "text"],
-  ["remark", "text"],
-]);
-
- 
-
 const dataIndexArr = ref<string[]>([]);
 
 const columns = ref<titleItem[]>([]);
@@ -113,16 +91,8 @@ type OrderId = string;
 
 interface DataItem {
   key: string;
-  id: string;
   chpnumber: string;
-  mch:string ;
-  class: string;
-  address:string ;
-  jdnumber: string;
-  pzname:string ;
-  price: string;
-  package:string ;
- 
+  remain:null | number ;
 }
 
 const drawerStore = useDrawerStore();
@@ -145,13 +115,7 @@ const onSearch = () => {
             (searchContent.value &&
             ( 
               item.chpnumber.toLowerCase().includes(keywords) ||
-              item.mch.toLowerCase().includes(keywords)  ||
-              item.class.toLowerCase().includes(keywords) ||
-              item.address.toLowerCase().includes(keywords) ||
-              item.jdnumber.toLowerCase().includes(keywords) ||
-              item.pzname.toLowerCase().includes(keywords) ||
-              item.price.toLowerCase().includes(keywords) ||
-              item.package.toLowerCase().includes(keywords) 
+              item.remain?.toString().toLowerCase().includes(keywords)
             ))
     )
   });
@@ -164,9 +128,8 @@ const onSearch = () => {
 };
 
 const onReset = async () => {
-  if (searchContent.value || selectedYear.value) {
+  if (searchContent.value) {
     searchContent.value = "";
-    selectedYear.value = undefined;
     await getData();
   }
   message.success("重置成功");
@@ -180,7 +143,6 @@ const getData = async () => {
   
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);
-  columns.value[0].fixed = "left";
  
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;
@@ -194,14 +156,6 @@ const state = reactive<{
   selectedRowKeys: [],
   loading: false,
 });
-
-const hasSelected = computed(() => state.selectedRowKeys.length > 0);
-
-const onSelectChange = (selectedRowKeys: OrderId[]) => {
-  console.log("selectedRowKeys changed: ", selectedRowKeys);
-  state.selectedRowKeys = selectedRowKeys;
-};
- 
 
 const combinedWatch = computed(() => ({
   open: addFormStore.open,

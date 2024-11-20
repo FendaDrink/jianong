@@ -14,6 +14,19 @@ export const updateProductInfo = (params: UnwrapNestedRefs<any>):Promise<any> =>
 /* 删除产品信息 */
 export const deleteProductInfo = (key: string):Promise<any> => request.delete('/enterprise/deleteProductInfo/'+key);
 
+/* 查询物资信息 */
+export const getInventoryInfo = ():Promise<any> => request.get('/enterprise/getWuzi');
+
+/* 添加物资信息 */
+export const addInventoryInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/enterprise/addWuzi',params);
+
+/* 修改物资信息 */
+export const updateInventoryInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.patch('/enterprise/updateWuzi',params);
+
+/* 删除物资信息 */
+export const deleteInventoryInfo = (key: string):Promise<any> => request.delete('/enterprise/deleteWuzi/'+key);
+
+
 /* 获取产品收购表 */
 export const getProductAcquire = ():Promise<any> => request.get('/purchasing/inStock');
 

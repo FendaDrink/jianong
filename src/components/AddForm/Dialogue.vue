@@ -40,6 +40,8 @@ const title = computed(() => {
   switch(path){
     case '/enterprise/productInfo':
       return '产品信息录入';
+    case '/enterprise/inventoryInfo':
+      return '物资信息录入';
     case '/enterprise/institute':
       return '机构信息录入';
     case '/purchasing/farmerInfo':
@@ -48,6 +50,16 @@ const title = computed(() => {
       return '物资入库'
     case '/enterprise/outBound':
       return '物资入库'
+    case '/enterprise/planning':
+      return '生产计划录入'
+    case '/production/accessInProduct':
+      return '生产基地产品入库';
+    case '/production/accessOutProduct':
+      return '生产基地产品出库';
+    case '/production/accessInInventory':
+      return '生产基地物资入库'
+    case '/production/accessOutInventory':
+      return '生产基地物资出库'
     case '/purchasing/accessProduct':
       return '代购点产品出库';
     case '/purchasing/acquireProduct':

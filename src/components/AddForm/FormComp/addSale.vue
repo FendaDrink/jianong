@@ -5,9 +5,9 @@
     style="overflow: hidden"
   >
     <a-col :span="12" style="float: left">
-      <a-form-item label="产品购买单号" v-bind="validateInfos.number">
-        <a-input v-model:value="modelRef.number" />
-      </a-form-item>
+<!--      <a-form-item label="产品购买单号" v-bind="validateInfos.number">-->
+<!--        <a-input v-model:value="modelRef.number" />-->
+<!--      </a-form-item>-->
       <a-form-item label="产品编号" v-bind="validateInfos.chpnumber">
         <a-input v-model:value="modelRef.chpnumber" />
       </a-form-item>
@@ -25,9 +25,9 @@
       <a-form-item label="总数" v-bind="validateInfos.total">
         <a-input v-model:value="modelRef.total" />
       </a-form-item>
-      <a-form-item label="总价" v-bind="validateInfos.sum">
-        <a-input v-model:value="modelRef.sum" />
-      </a-form-item>
+<!--      <a-form-item label="总价" v-bind="validateInfos.sum">-->
+<!--        <a-input v-model:value="modelRef.sum" />-->
+<!--      </a-form-item>-->
       <a-form-item label="经手人" v-bind="validateInfos.person">
         <a-input v-model:value="modelRef.person" />
       </a-form-item> 
@@ -59,27 +59,23 @@ const labelCol = { span: 8 };
 const wrapperCol = { span: 16 };
 
 interface ModelRef {
-  number: string;
   chpnumber: string;
   mch: string;
   gknumber: string;
-  price: string;
-  total: string;
-  sum: string;
+  price: number | null;
+  total: number | null;
   person: string;
-  time: string;
+  time: number | null;
 }
 
 const modelRef = reactive<ModelRef>({
-  number: "",
   chpnumber: "",
   mch: "",
   gknumber: "",
-  price: "",
-  total: "",
-  sum: "",
+  price: null,
+  total: null,
   person: "",
-  time: "",
+  time: null,
 });
 
 const isInteger = (str: string) => {
@@ -88,16 +84,6 @@ const isInteger = (str: string) => {
 };
 
 const rulesRef = reactive({
-  number: [
-    {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
-          return Promise.reject("请输入产品购买单号");
-        }
-        return Promise.resolve();
-      },
-    },
-  ],
   chpnumber: [
     {
       validator: (rule: any, value: string) => {
@@ -130,8 +116,8 @@ const rulesRef = reactive({
   ],
   price: [
     {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
+      validator: (rule: any, value: number | null) => {
+        if (!value) {
           return Promise.reject("请输入产品单价");
         }
         return Promise.resolve();
@@ -140,19 +126,9 @@ const rulesRef = reactive({
   ],
   total: [
     {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
+      validator: (rule: any, value: number | null) => {
+        if (!value) {
           return Promise.reject("请输入产品总数");
-        }
-        return Promise.resolve();
-      },
-    },
-  ],
-  sum: [
-    {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
-          return Promise.reject("请输入产品总价");
         }
         return Promise.resolve();
       },
@@ -170,8 +146,8 @@ const rulesRef = reactive({
   ],
   time: [
     {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
+      validator: (rule: any, value: number | null) => {
+        if (!value) {
           return Promise.reject("请输入销售时间");
         }
         return Promise.resolve();
@@ -187,7 +163,7 @@ const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef, {
 const onSubmit = () => {
   validate()
     .then(async () => {
-      let res = await wholesaleOutstock(toRaw(modelRef));
+      let res = await wholesaleOutstock({...toRaw(modelRef), time: modelRef.time.valueOf()});
       if (res.data.code === 200) {
         addFormStore.open = false;
         message.success("新增成功");

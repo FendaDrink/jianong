@@ -19,11 +19,16 @@ import InInventoryForm from "@/components/AddForm/FormComp/InInventoryForm.vue";
 import OutInventoryForm from "@/components/AddForm/FormComp/OutInventoryForm.vue";
 import EnterpriseInInventoryForm from "@/components/AddForm/FormComp/EnterpriseInInventoryForm.vue";
 import EnterpriseOutInventoryForm from "@/components/AddForm/FormComp/EnterpriseOutInventoryForm.vue";
+import PlanningForm from "@/components/AddForm/FormComp/PlanningForm.vue";
+import ProductionInStock from "@/components/AddForm/FormComp/ProductionInStock.vue";
+import ProductionOutStock from "@/components/AddForm/FormComp/ProductionOutStock.vue";
+import ProductionInInventoryForm from "@/components/AddForm/FormComp/ProductionInInventoryForm.vue";
+import ProductionOutInventoryForm from "@/components/AddForm/FormComp/ProductionOutInventoryForm.vue";
 import addCustomerInfo from "@/components/AddForm/FormComp/addCustomerInfo.vue"
 import addProductInfo from "@/components/AddForm/FormComp/addProductStock.vue"
 import addSaleFrom from "@/components/AddForm/FormComp/addSale.vue"
 import updateStock from "@/components/AddForm/FormComp/wholesaleUpdatestock.vue"
-import { purchasingOutstock } from "@/request/api";
+import InventoryInfoForm from "@/components/AddForm/FormComp/InventoryInfoForm.vue";
 
 const currentComponent = () => {
   switch (path) {
@@ -41,12 +46,24 @@ const currentComponent = () => {
       return purchasInStock;
     case "/enterprise/productInfo":
       return ProductInfoForm;
+    case '/enterprise/inventoryInfo':
+      return InventoryInfoForm;
     case "/enterprise/institute":
       return InstitutionForm;
     case '/enterprise/inBound':
       return EnterpriseInInventoryForm;
     case '/enterprise/outBound':
       return EnterpriseOutInventoryForm;
+    case '/enterprise/planning':
+      return PlanningForm;
+    case '/production/accessInProduct':
+      return ProductionInStock;
+    case '/production/accessOutProduct':
+      return ProductionOutStock;
+    case '/production/accessInInventory':
+      return ProductionInInventoryForm;
+    case '/production/accessOutInventory':
+      return ProductionOutInventoryForm;
     case "/purchasing/accessInventory":
       return InInventoryForm;
     case "/purchasing/accessOutInventory":

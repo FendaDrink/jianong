@@ -133,7 +133,7 @@ export const addcustomerInfo = (params: UnwrapNestedRefs<any>):Promise<any> => r
 // 修改客户信息
 export const updatecustomerInfo = (params:UnwrapNestedRefs<any>):Promise<UpdateOrderAPIRes> => request.patch('wholesale/updatecustomer',params);
 // 删除客户信息
-export const deletecustomerInfo = (key:string[]):Promise<any> => request.delete('/wholesale/deletecustomer'+key);
+export const deletecustomerInfo = (key:string):Promise<any> => request.delete('/wholesale/deletecustomer/'+key);
 // 查询产品库存
 export const getProductStock = ():Promise<any> => request.get('/wholesale/getstock');
 // 查询入库记录

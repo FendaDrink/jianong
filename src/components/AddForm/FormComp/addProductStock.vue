@@ -170,8 +170,8 @@ const rulesRef = reactive({
   ],
   time: [
     {
-      validator: (rule: any, value: string) => {
-        if (value === "") {
+      validator: (rule: any, value: number | null) => {
+        if (!value) {
           return Promise.reject("请输入入库时间");
         }
         return Promise.resolve();
@@ -188,7 +188,7 @@ const rulesRef = reactive({
       },
     },
   ],
-  机构: [
+  机构编号: [
     {
       validator: (rule: any, value: string) => {
         if (value === "") {
@@ -218,7 +218,7 @@ const { resetFields, validate, validateInfos } = useForm(modelRef, rulesRef, {
 const onSubmit = () => {
   validate()
     .then(async () => {
-      let res = await wholesaleInstock(toRaw(modelRef));
+      let res = await wholesaleInstock({...toRaw(modelRef), time: modelRef.time.valueOf()});
       if (res.data.code === 200) {
         addFormStore.open = false;
         message.success("新增成功");

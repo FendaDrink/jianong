@@ -13,7 +13,7 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 2000 }"
+      :scroll="{  x: 1500 }"
       style="margin-top:5px"
       :locale="localeOption"
   >

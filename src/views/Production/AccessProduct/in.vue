@@ -1,7 +1,7 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">物资入库</h1>
+  <h1 style="font-size: 28px;margin-bottom: 20px">生产基地产品入库</h1>
   <Dialogue/>
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
@@ -13,9 +13,10 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1500 }"
+      :scroll="{  x: 1800 }"
       style="margin-top:5px"
       :locale="localeOption"
+      :pagination={pageSize:7}
   >
     <template #bodyCell="{ column, text, record }">
       <div>
@@ -33,17 +34,16 @@
   <Drawer/>
 </template>
 <script lang="ts" setup>
-import { computed, createVNode, type UnwrapRef } from "vue";
+import { computed } from "vue";
 import { onMounted, reactive, ref, watch } from "vue";
 import Dialogue from "@/components/AddForm/Dialogue.vue";
-import { message } from "ant-design-vue";
+import { message, Modal } from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import { useDrawerStore } from "@/stores/drawer";
-import { getInInventory } from '@/request/enterprise'
+import {getProducInstock} from '@/request/production'
+
 import { useAddFormStore } from "@/stores/addForm";
-import { cloneDeep } from "lodash-es";
 import moment from "moment";
-import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import type { Dayjs } from "dayjs";
 
 const confirmLoading = ref<boolean>(false);
@@ -91,15 +91,16 @@ type OrderId = string;
 
 interface DataItem {
   key: string;
-  id: string;
-  wznumber: string;
+  chpnumber: string;
   number: string;
   mch: string;
-  inprice: number | null;
-  total: number | null;
-  sum: number | null;
-  jigou: string;
+  price: number;
+  total: number;
+  money: number;
+  person: string;
   time: string;
+  pianming: string;
+  jigou: string;
 }
 
 const drawerStore = useDrawerStore();
@@ -120,13 +121,15 @@ const onSearch = () => {
   dataSource.value =  dataSourceCopy.value.filter(item => {
     return (
             (searchContent.value &&
-            (item.number.includes(searchContent.value) ||
-              item.wznumber.toLowerCase().includes(keywords) ||
-              item.mch.toLowerCase().includes(keywords) ||
-              item.inprice?.toString().toLowerCase().includes(keywords) ||
+            (item.number?.includes(searchContent.value) ||
+              item.chpnumber?.toLowerCase().includes(keywords) ||
+              item.mch?.toLowerCase().includes(keywords) ||
+              item.price?.toString().toLowerCase().includes(keywords) ||
               item.total?.toString().toLowerCase().includes(keywords) ||
-              item.sum?.toString().toLowerCase().includes(keywords) ||
-              item.jigou.toLowerCase().includes(keywords)
+              item.money?.toString().toLowerCase().includes(keywords) ||
+              item.person?.toLowerCase().includes(keywords) ||
+              item.pianming?.toLowerCase().includes(keywords) ||
+              item.jigou?.toLowerCase().includes(keywords)
             ))
     )
   });
@@ -139,8 +142,9 @@ const onSearch = () => {
 };
 
 const onReset = async () => {
-  if (searchContent.value) {
+  if (searchContent.value || selectedYear.value) {
     searchContent.value = "";
+    selectedYear.value = undefined;
     await getData();
   }
   message.success("重置成功");
@@ -149,7 +153,7 @@ const onReset = async () => {
 // 获取出库数据
 const getData = async () => {
   loading.value = true;
-  let res = await getInInventory();
+  let res = await getProducInstock();
   columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
   dataIndexArr.value = columns.value.map((item) => item.dataIndex);
   columns.value[0].fixed = "left";
