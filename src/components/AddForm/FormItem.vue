@@ -19,6 +19,10 @@ import InInventoryForm from "@/components/AddForm/FormComp/InInventoryForm.vue";
 import OutInventoryForm from "@/components/AddForm/FormComp/OutInventoryForm.vue";
 import EnterpriseInInventoryForm from "@/components/AddForm/FormComp/EnterpriseInInventoryForm.vue";
 import EnterpriseOutInventoryForm from "@/components/AddForm/FormComp/EnterpriseOutInventoryForm.vue";
+import addCustomerInfo from "@/components/AddForm/FormComp/addCustomerInfo.vue"
+import addProductInfo from "@/components/AddForm/FormComp/addProductStock.vue"
+import addSaleFrom from "@/components/AddForm/FormComp/addSale.vue"
+import updateStock from "@/components/AddForm/FormComp/wholesaleUpdatestock.vue"
 import { purchasingOutstock } from "@/request/api";
 
 const currentComponent = () => {
@@ -47,6 +51,14 @@ const currentComponent = () => {
       return InInventoryForm;
     case "/purchasing/accessOutInventory":
       return OutInventoryForm;
+    case '/wholesale/customer':
+      return addCustomerInfo;
+    case '/wholesale/inBound':
+      return addProductInfo;
+    case '/wholesale/sale':
+      return addSaleFrom;
+    case 'wholesale/inventory':
+      return updateStock;
     default:
       return PublicForm;
   }
