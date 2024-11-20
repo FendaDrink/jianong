@@ -17,9 +17,12 @@ declare module 'vue' {
     ACol: typeof import('ant-design-vue/es')['Col']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
     ADatePicker: typeof import('ant-design-vue/es')['DatePicker']
+    AddCustomerInfo: typeof import('./src/components/AddForm/FormComp/addCustomerInfo.vue')['default']
     AddFarmerInfo: typeof import('./src/components/AddForm/FormComp/addFarmerInfo.vue')['default']
     AddForm: typeof import('./src/components/AddForm.vue')['default']
     AddInstitutionForm: typeof import('./src/components/AddForm/FormComp/addInstitutionForm.vue')['default']
+    AddProductStock: typeof import('./src/components/AddForm/FormComp/addProductStock.vue')['default']
+    AddSale: typeof import('./src/components/AddForm/FormComp/addSale.vue')['default']
     ADescriptions: typeof import('ant-design-vue/es')['Descriptions']
     ADescriptionsItem: typeof import('ant-design-vue/es')['DescriptionsItem']
     ADivider: typeof import('ant-design-vue/es')['Divider']
@@ -61,6 +64,7 @@ declare module 'vue' {
     ImportFile: typeof import('./src/components/AddForm/FormComp/ImportFile.vue')['default']
     InInventoryForm: typeof import('./src/components/AddForm/FormComp/InInventoryForm.vue')['default']
     InstitutionForm: typeof import('./src/components/AddForm/FormComp/InstitutionForm.vue')['default']
+    InventoryInfoForm: typeof import('./src/components/AddForm/FormComp/InventoryInfoForm.vue')['default']
     OutInventoryForm: typeof import('./src/components/AddForm/FormComp/OutInventoryForm.vue')['default']
     PlanningForm: typeof import('./src/components/AddForm/FormComp/PlanningForm.vue')['default']
     ProductInfo: typeof import('./src/components/AddForm/FormComp/ProductInfoForm.vue')['default']
@@ -75,5 +79,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UpdateStock: typeof import('./src/components/AddForm/FormComp/updateStock.vue')['default']
+    WholesaleUpdatestock: typeof import('./src/components/AddForm/FormComp/wholesaleUpdatestock.vue')['default']
   }
 }

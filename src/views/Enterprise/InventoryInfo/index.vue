@@ -14,7 +14,6 @@
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1200 }"
       style="margin-top:5px"
       :locale="localeOption"
       :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange, columnWidth: 5}"
@@ -28,7 +27,7 @@
               :type="inputType.get(column.dataIndex)"
               v-model:value="editableData[record.key][column.dataIndex]"
               style="margin: -5px 0;"
-              :disabled="column.dataIndex === 'chpnumber'"
+              :disabled="column.dataIndex === 'number'"
           />
           <div v-else style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
             {{ text?text:'/' }}
@@ -63,7 +62,7 @@ import Dialogue from "@/components/AddForm/Dialogue.vue";
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {getProductInfo, updateProductInfo, deleteProductInfo} from '@/request/enterprise'
+import {getInventoryInfo, updateInventoryInfo, deleteInventoryInfo} from '@/request/enterprise'
 import {deleteOrderCarBatch} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
@@ -88,14 +87,11 @@ interface titleItem{
 }
 
 const inputType = new Map([
-  ['chpnumber', 'text'],
-  ['mch', 'text'],
-  ['class', 'text'],
-  ['address', 'text'],
-  ['jdnumber', 'text'],
-  ['pznumber', 'text'],
-  ['price', 'number'],
-  ['package', 'text']
+  ['number', 'text'],
+  ['wzname', 'text'],
+  ['danwei', 'text'],
+  ['inprice', 'number'],
+  ['outprice', 'number'],
 ]);
 
 const localeOption = {
@@ -122,15 +118,11 @@ const columns = ref<titleItem[]>([]);
 
 interface DataItem {
   key:string;
-  id: string;
-  chpnumber: string;
-  mch: string;
-  class: string;
-  address: string;
-  jdnumber: string;
-  pzname: string;
-  price: number;
-  package: string;
+  number: string;
+  wzname: string;
+  danwei: string;
+  inprice: number | null;
+  outprice: number | null;
 }
 
 const drawerStore = useDrawerStore();
@@ -155,7 +147,7 @@ const cancel = (key: string) => {
 };
 
 const deleteItem = async (key:string) => {
-  let res = await deleteProductInfo(key);
+  let res = await deleteInventoryInfo(key);
   if(res.data.code === 200){
     message.success('删除成功');
     await getData();
@@ -172,14 +164,11 @@ const onSearch = () => {
   const keywords = searchContent.value.trim().toLowerCase()
   dataSource.value =  dataSourceCopy.value.filter(item => {
    return (
-    item.chpnumber.toLowerCase().includes(keywords) ||
-    item.mch.toLowerCase().includes(keywords) ||
-    item.class.toLowerCase().includes(keywords) ||
-    item.address.toLowerCase().includes(keywords) ||
-    item.jdnumber.toLowerCase().includes(keywords) ||
-    item.price?.toString().toLowerCase().includes(keywords) ||
-    item.pzname.toLowerCase().includes(keywords) ||
-    item.package.toLowerCase().includes(keywords)
+    item.number.toLowerCase().includes(keywords) ||
+    item.wzname.toLowerCase().includes(keywords) ||
+    item.danwei.toLowerCase().includes(keywords) ||
+    item.inprice?.toString().toLowerCase().includes(keywords) ||
+    item.outprice?.toString().toLowerCase().includes(keywords)
   )
   });
   if(dataSource.value.length>0){
@@ -201,16 +190,15 @@ const onReset = async () => {
 // 获取订单车数据
 const getData = async () => {
   loading.value = true;
-  let res = await getProductInfo();
+  let res = await getInventoryInfo();
   columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
-  columns.value = columns.value.filter(item=>item.dataIndex!=='key')
+  columns.value = columns.value.filter(item=>item.dataIndex!=='key');
   columns.value[0].fixed = 'left';
   columns.value.push({
     title: '操作',
     dataIndex: 'operation',
-    width:40,
-    fixed:'right'
+    width:40
   })
   dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;
@@ -239,7 +227,7 @@ const update= async (key:string) => {
     }
   }
   try{
-    let res = await updateProductInfo(editableData[key]);
+    let res = await updateInventoryInfo(editableData[key]);
     if(res.data.code === 200){
       message.success('修改成功');
       await getData();

@@ -93,7 +93,7 @@ export const deleteOrderCarBatch = (params:UnwrapNestedRefs<any>):Promise<Delete
 // 代购点
 // 农户增删改查
 export const addFarmerInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/farmer',params);
-export const deleteFarmerInfo = (key:string):Promise<any> => request.delete('/purchasing/farmer/'+key);
+export const deleteFarmerInfo = (key:string[]):Promise<any> => request.delete('/purchasing/farmer'+key);
 export const updateFarmerInfo = (params:UnwrapNestedRefs<any>):Promise<UpdateOrderAPIRes> => request.patch('/purchasing/farmer',params);
 export const getFarmerInfo = ():Promise<any> => request.get('/purchasing/farmer');
 // 产品管理
@@ -124,3 +124,27 @@ export const getOutInventory = ():Promise<any> => request.get('/purchasing/outIn
 
 // 代购点物资出库
 export const purchasingOutInventory = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/purchasing/outInventory',params)
+
+// 批发中心
+// 获取顾客信息
+export const getcustomerInfo = ():Promise<any> => request.get('/wholesale/getcustomer');
+// 增加客户信息（弹窗）
+export const addcustomerInfo = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/wholesale/addcustomer',params)
+// 修改客户信息
+export const updatecustomerInfo = (params:UnwrapNestedRefs<any>):Promise<UpdateOrderAPIRes> => request.patch('wholesale/updatecustomer',params);
+// 删除客户信息
+export const deletecustomerInfo = (key:string):Promise<any> => request.delete('/wholesale/deletecustomer/'+key);
+// 查询产品库存
+export const getProductStock = ():Promise<any> => request.get('/wholesale/getstock');
+// 查询入库记录
+export const getProductInstock = ():Promise<any> => request.get('/wholesale/getinstock');
+// 查询产品出库记录
+export const getProductOuttock = ():Promise<any> => request.get('/wholesale/getoutstock');
+// 查询产品信息
+export const getproductInfo = ():Promise<any> => request.get('/wholesale/getproduct');
+// 批发中心产品盘存
+export const wholesaleUpdatestock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/wholesale/updateStock',params)
+// 产品出库（销售）
+export const wholesaleOutstock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/wholesale/outStock',params)
+// 产品入库
+export const wholesaleInstock = (params: UnwrapNestedRefs<any>):Promise<any> => request.post('/wholesale/inStock',params)
