@@ -64,7 +64,7 @@ import Test from '@/components/AddForm/FormComp/ImportFile.vue'
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import {deleteFarmerInfo, deleteOrderCarBatch, getFarmerInfo, updateFarmerInfo} from "@/request/api";
+import { deleteFarmerInfo, getFarmerInfo, updateFarmerInfo} from "@/request/api";
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
 import moment from 'moment'
@@ -273,7 +273,7 @@ const showDeleteConfirm = () => {
     async onOk(){
       try{
         confirmLoading.value = true;
-        let res = await deleteOrderCarBatch({orderIds:state.selectedRowKeys});
+        let res = await deleteFarmerInfo({orderIds:state.selectedRowKeys});
         if(res.data.code === 200){
           confirmLoading.value = false;
 

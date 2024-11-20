@@ -181,7 +181,7 @@ const router = createRouter({
               {
                 path:'inventory',
                 name:'WholesaleInventory',
-                component:()=>import('@/views/Wholesale/Sale/index.vue')
+                component:()=>import('@/views/Wholesale/Inventory/index.vue')
               },
               {
                 path:'inStock',
