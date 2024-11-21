@@ -19,7 +19,7 @@
       </a-form-item>
     </a-col>
     <a-col :span="12" style="float:left;margin-left: 70px">
-      <a-form-item label="入库时间" v-bind="validateInfos.time">
+      <a-form-item label="出库时间" v-bind="validateInfos.time">
         <a-date-picker v-model:value="modelRef.time" show-time/>
       </a-form-item>
       <a-form-item label="农户编号" v-bind="validateInfos.nhnumber">

@@ -49,7 +49,7 @@ const title = computed(() => {
     case '/enterprise/inBound':
       return '物资入库'
     case '/enterprise/outBound':
-      return '物资入库'
+      return '物资出库'
     case '/enterprise/planning':
       return '生产计划录入'
     case '/production/accessInProduct':

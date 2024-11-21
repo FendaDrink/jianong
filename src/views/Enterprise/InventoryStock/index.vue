@@ -1,24 +1,21 @@
 <template>
   <a-spin tip="加载中，请稍后..." spinning="spinning" size="large" v-if="0" style="display: flex;justify-content: center;align-items: center">
   </a-spin>
-  <h1 style="font-size: 28px;margin-bottom: 20px">顾客信息表</h1>
-  <Dialogue/>
+  <h1 style="font-size: 28px;margin-bottom: 20px">公司物资库存</h1>
+
   <span style="height: 32px;">
     <a-input v-model:value="searchContent" placeholder="请输入搜索内容" style="width: 300px"/>
     <a-button type="primary" @click="onSearch" style="margin-left: 10px">搜索</a-button>
     <a-button type="default" style="margin-left: 10px" @click="onReset">重置</a-button>
-    <a-button type="dashed"  :disabled="!hasSelected" style="margin-left: 10px" @click="showDeleteConfirm">批量删除</a-button>
-    <!-- <Test/> -->
+
   </span>
   <a-table
-      row-key="orderId"
+      row-key="key"
       :columns="columns"
       :data-source="dataSource"
       :loading="loading"
-      :scroll="{  x: 1000 }"
       style="margin-top:5px"
       :locale="localeOption"
-      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange, columnWidth: 5}"
   >
     <template #bodyCell="{ column, text, record }">
       <div>
@@ -29,6 +26,7 @@
               :type="inputType.get(column.dataIndex)"
               v-model:value="editableData[record.key][column.dataIndex]"
               style="margin: -5px 0;"
+              :disabled="column.dataIndex === 'wznumber'"
           />
           <div v-else style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden">
             {{ text?text:'/' }}
@@ -37,17 +35,13 @@
         <template v-else-if="column.dataIndex === 'operation'">
           <div class="editable-row-operations">
           <span v-if="editableData[record.key]">
-            <a-popconfirm title="确认修改?" @confirm="update(record.key)" cancel-text="取消" ok-text="保存">
+            <a-popconfirm title="确认盘点?" @confirm="update(record.key)" cancel-text="取消" ok-text="保存">
               <a>保存</a>
             </a-popconfirm>
             <a-typography-link @click="cancel(record.key)">取消</a-typography-link>
           </span>
             <span v-else>
-            <a @click.capture="check(record.key)">查看</a>
-            <a @click="edit(record.key)">编辑</a>
-            <a-popconfirm title="确认删除?" @confirm="deleteItem(record.key)" cancel-text="取消" ok-text="确认">
-              <a>删除</a>
-            </a-popconfirm>
+            <a @click="edit(record.key)">盘点</a>
           </span>
           </div>
         </template>
@@ -57,21 +51,15 @@
   <Drawer/>
 </template>
 <script lang="ts" setup>
-import {computed, createVNode, type UnwrapRef} from 'vue';
+import {computed, type UnwrapRef} from 'vue';
 import {onMounted, reactive, ref, watch} from 'vue';
-import Dialogue from "@/components/AddForm/Dialogue.vue";
-import Test from '@/components/AddForm/FormComp/ImportFile.vue'
+
 import {message, Modal} from "ant-design-vue";
 import Drawer from "@/components/CheckForm/CarDrawer.vue";
 import {useDrawerStore} from "@/stores/drawer";
-import { deletecustomerInfo, getcustomerInfo, updatecustomerInfo} from "@/request/api";
+import {getInventory, updateInventory} from '@/request/enterprise'
 import {useAddFormStore} from "@/stores/addForm";
 import {cloneDeep} from "lodash-es";
-import moment from 'moment'
-import {ExclamationCircleOutlined} from "@ant-design/icons-vue";
-import type { Dayjs } from 'dayjs';
-
-const confirmLoading = ref<boolean>(false);
 
 const searchContent = ref<string>('');
 
@@ -79,7 +67,6 @@ const addFormStore = useAddFormStore();
 
 const loading = ref<boolean>(false);
 
-const selectedYear = ref<Dayjs>();
 interface titleItem{
   title:string;
   dataIndex:string;
@@ -91,12 +78,7 @@ interface titleItem{
 }
 
 const inputType = new Map([
-  ['key','text'],
-  ['number','text'],
-  ['gkname','text'],
-  ['address','text'],
-  ['tel','number'],
-  ['area','text'],
+  ['remain', 'number']
 ]);
 
 const localeOption = {
@@ -124,10 +106,9 @@ const columns = ref<titleItem[]>([]);
 type OrderId = string;
 
 interface DataItem {
-  key:OrderId; 
-  address:string;
-  gkname:string;
-  number: string;
+  key: string;
+  wznumber: string;
+  remain: number|number;
 }
 
 const drawerStore = useDrawerStore();
@@ -138,28 +119,13 @@ const dataSourceCopy = ref<DataItem[]>([]);
 
 const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
 
-const check =  async (orderId:string) => {
-  drawerStore.changeOpen();
-  drawerStore.orderId = orderId;
-}
-
-const edit = (key: string) => {
+const edit = async  (key: string) => {
   editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
 };
 
 const cancel = (key: string) => {
   delete editableData[key];
 };
-// 删除农户信息
-const deleteItem = async (key:string) => {
-  let res = await deletecustomerInfo(key);
-  if(res.data.code === 200){
-    message.success('删除成功');
-    await getData();
-  }else{
-    message.error('删除失败');
-  }
-}
 
 const onSearch = () => {
   if(!searchContent.value){
@@ -170,14 +136,10 @@ const onSearch = () => {
   dataSource.value =  dataSourceCopy.value.filter(item => {
     return (
             (searchContent.value &&
-            (
-              item.number.toLowerCase().includes(keywords) ||
-              item.gkname.toLowerCase().includes(keywords) ||
-              item.address.toLowerCase().includes(keywords)
-            ))
-    )
+            (item.wznumber.toLowerCase().includes(keywords) ||
+            item.remain!.toString().toLowerCase().includes(keywords)
+    )))
   });
-  
   if(dataSource.value.length>0){
     message.success('搜索成功')
   }else{
@@ -187,62 +149,31 @@ const onSearch = () => {
 }
 
 const onReset = async () => {
-  if(searchContent.value || selectedYear.value){
+  if(searchContent.value){
     searchContent.value = '';
-    selectedYear.value = undefined;
     await getData();
   }
   message.success('重置成功');
 }
 
-// 获取农户信息
+// 获取订单车数据
 const getData = async () => {
   loading.value = true;
-  let res = await getcustomerInfo();
-
-  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
-
+  let res = await getInventory();
+  columns.value = [...res.data.data.title];
   dataIndexArr.value = columns.value.map(item=>item.dataIndex);
-  columns.value[0].fixed = 'left';
-  columns.value[0].width = 20
-  columns.value.push({
-    title: '操作',
-    dataIndex: 'operation',
-    width:45,
-    fixed:'right'
-  })
-  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value.map(item=>{
-    return {
-      ...item,
-      inTime:moment(item.inTime).format('YYYY-MM-DD'),
-      time: moment(item.time).format('YYYY-MM-DD HH:mm:ss')
-    }
-  });
+  columns.value = res.data.data.title.filter(item => item.dataIndex !== 'id' && item.dataIndex !== 'key');
+  dataSource.value = dataSourceCopy.value = <DataItem[]>res.data.data.value
   loading.value = false;
 }
 
-// 批量操作
-const state = reactive<{
-  selectedRowKeys: OrderId[];
-  loading: boolean;
-}>({
-  selectedRowKeys: [],
-  loading: false,
-});
-
-const hasSelected = computed(() => state.selectedRowKeys.length > 0);
-
-const onSelectChange = (selectedRowKeys: OrderId[]) => {
-  console.log('selectedRowKeys changed: ', selectedRowKeys);
-  state.selectedRowKeys = selectedRowKeys;
-};
-// 农户信息修改
 const update= async (key:string) => {
   try{
-    let res = await updatecustomerInfo(editableData[key]);
-
+    let res = await updateInventory(editableData[key]);
+    if(editableData[key].remain < 0)
+      return message.error('库存不能小于0');
     if(res.data.code === 200){
-      message.success('修改成功');
+      message.success('盘点成功');
       await getData();
       delete editableData[key];
     }
@@ -257,45 +188,6 @@ const combinedWatch = computed(() => ({
   openInsert: addFormStore.openInsert,
 }));
 
-// 显示删除确认框
-const showDeleteConfirm = () => {
-  Modal.confirm({
-    title: `确认要删除${state.selectedRowKeys.length}项吗？`,
-    icon: createVNode(ExclamationCircleOutlined),
-    okText: '确认',
-    okType: 'danger',
-    cancelText: '取消',
-    async onOk(){
-      try{
-        confirmLoading.value = true;
-        let res = await deletecustomerInfo({orderIds:state.selectedRowKeys});
-        if(res.data.code === 200){
-          confirmLoading.value = false;
-
-        }
-      }catch (err:any){
-        message.error(err.response.data.msg);
-      }
-
-    },
-    onCancel() {
-      console.log('Cancel');
-    },
-    async afterClose(){
-      message.success('删除成功');
-      state.selectedRowKeys = [];
-      try{
-        await getData();
-      }catch (err){
-        console.log(err)
-      }
-    }
-  });
-};
-
-const selectHanlder = (value:any)=>{
-  console.log(value.year());
-}
 
 watch(combinedWatch, async (newValue, oldValue) => {
   if ((oldValue.open && !newValue.open) || (oldValue.openInsert && !newValue.openInsert)) {

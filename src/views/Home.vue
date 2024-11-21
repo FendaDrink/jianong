@@ -16,6 +16,12 @@
           <a-menu-item key="/basic/institute">
             机构信息
           </a-menu-item>
+          <a-menu-item key="/basic/farmerInfo">
+            农户信息
+          </a-menu-item>
+          <a-menu-item key="/basic/customer">
+            顾客信息
+          </a-menu-item>
         </a-sub-menu>
         <a-sub-menu v-if="userInfo.type === '5' || userInfo.type === '1'" key="/enterprise">
           <template #title><span><BarsOutlined /><span>公司系统</span></span></template>
@@ -39,6 +45,9 @@
           </a-menu-item>
            <a-menu-item key="/enterprise/outBound">
             物资出库
+          </a-menu-item>
+          <a-menu-item key="/enterprise/inventoryStock">
+            公司物资库存
           </a-menu-item>
           <a-menu-item v-if="userInfo.authorization === '1' || userInfo.authorization === '2'" key="/enterprise/inventory">
             公司物资盘点
