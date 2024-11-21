@@ -40,6 +40,16 @@ const router = createRouter({
               name:'BasicInstitute',
               component:()=>import('@/views/Basic/Institution/index.vue')
             },
+            {
+              path:'farmerInfo',
+              name:'BasicFarmerInfo',
+              component:()=>import('@/views/Basic/FarmerInfo/index.vue')
+            },
+            {
+              path:'customer',
+              name:'BasicCustomer',
+              component:()=>import('@/views/Basic/Customer/index.vue')
+            },
           ]
         },
         {
@@ -78,6 +88,11 @@ const router = createRouter({
               component:()=>import('@/views/Enterprise/Inventory/index.vue')
             },
             {
+              path:'inventoryStock',
+              name:'EnterpriseInventoryStock',
+              component:()=>import('@/views/Enterprise/InventoryStock/index.vue')
+            },
+            {
               path:'sale',
               name:'EnterpriseSale',
               component:()=>import('@/views/Enterprise/Sale/index.vue')
@@ -91,7 +106,7 @@ const router = createRouter({
               path: 'institute',
               name: 'institute',
               component:()=>import('@/views/Enterprise/Institution/index.vue')
-            }
+            },
           ]
         },
         {
@@ -149,9 +164,6 @@ const router = createRouter({
                 name:'ProductInventory',
                 component:()=>import('@/views/Production/ProductInventory/index.vue')
               },
-
-
-             
           ]
         },
         {
